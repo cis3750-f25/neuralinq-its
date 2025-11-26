@@ -1,0 +1,318 @@
+{
+    "questions": [
+        {
+            "id": 1,
+            "skill": "vocabulary",
+            "level": 1,
+            "question": "Select the word that best completes the sentence: 'The student was _____ about learning new vocabulary words.'",
+            "answer": "excited",
+            "hints": [
+                "Consider words that describe positive feelings toward learning",
+                "This word describes someone who is eager and enthusiastic",
+                "The word starts with 'e' and means showing enthusiasm"
+            ],
+            "type": "sentence_completion",
+            "difficulty": "beginner",
+            "lesson": "vocabulary_lesson_1"
+        },
+        {
+            "id": 2,
+            "skill": "vocabulary",
+            "level": 1,
+            "question": "What is the meaning of the word 'observe' in this sentence: 'Scientists observe animals in their natural habitat'?",
+            "answer": "watch",
+            "hints": [
+                "Think about what scientists do when they study animals",
+                "This action involves using your eyes carefully",
+                "It means to look at something closely and carefully"
+            ],
+            "type": "word_meaning",
+            "difficulty": "beginner",
+            "lesson": "vocabulary_lesson_1"
+        },
+        {
+            "id": 3,
+            "skill": "vocabulary",
+            "level": 1,
+            "question": "Choose the synonym for 'enormous': The enormous elephant walked slowly through the forest.",
+            "answer": "huge",
+            "hints": [
+                "Look for a word that means the same as 'enormous'",
+                "This word describes something very large in size",
+                "It's a common word that starts with 'h'"
+            ],
+            "type": "synonym_identification",
+            "difficulty": "beginner",
+            "lesson": "vocabulary_lesson_1"
+        },
+        {
+            "id": 4,
+            "skill": "vocabulary",
+            "level": 1,
+            "question": "What is the opposite of 'ancient'?",
+            "answer": "modern",
+            "hints": [
+                "Think about time periods - ancient refers to very old times",
+                "The opposite would describe current or recent times",
+                "This word describes things from the present day"
+            ],
+            "type": "antonym_identification",
+            "difficulty": "beginner",
+            "lesson": "vocabulary_lesson_1"
+        },
+        {
+            "id": 5,
+            "skill": "vocabulary",
+            "level": 1,
+            "question": "Complete the analogy: Hot is to cold as light is to _____.",
+            "answer": "dark",
+            "hints": [
+                "Think about opposites - hot and cold are opposites",
+                "What is the opposite of light?",
+                "This word describes the absence of light"
+            ],
+            "type": "analogy",
+            "difficulty": "beginner",
+            "lesson": "vocabulary_lesson_1"
+        },
+        {
+            "id": 6,
+            "skill": "grammar",
+            "level": 1,
+            "question": "Identify the verb in this sentence: 'The teacher explains the lesson clearly.'",
+            "answer": "explains",
+            "hints": [
+                "A verb is an action word - what is the teacher doing?",
+                "Look for the word that shows what action is being performed",
+                "This word tells us what the teacher is doing with the lesson"
+            ],
+            "type": "part_of_speech",
+            "difficulty": "beginner",
+            "lesson": "grammar_lesson_1"
+        },
+        {
+            "id": 7,
+            "skill": "grammar",
+            "level": 1,
+            "question": "Choose the correct pronoun: '_____ are studying English grammar.' (We/Us/Our)",
+            "answer": "We",
+            "hints": [
+                "This pronoun is used as the subject of the sentence",
+                "It refers to a group that includes the speaker",
+                "Use this form when the pronoun is doing the action"
+            ],
+            "type": "pronoun_usage",
+            "difficulty": "beginner",
+            "lesson": "grammar_lesson_1"
+        },
+        {
+            "id": 8,
+            "skill": "grammar",
+            "level": 1,
+            "question": "What is the plural form of 'child'?",
+            "answer": "children",
+            "hints": [
+                "Some English words have irregular plural forms",
+                "This word doesn't just add 's' to become plural",
+                "The plural form is completely different from the singular"
+            ],
+            "type": "plural_forms",
+            "difficulty": "beginner",
+            "lesson": "grammar_lesson_1"
+        },
+        {
+            "id": 9,
+            "skill": "grammar",
+            "level": 1,
+            "question": "Select the correct verb form: 'She _____ to school every day.' (go/goes/going)",
+            "answer": "goes",
+            "hints": [
+                "The subject 'She' is singular and third person",
+                "For third person singular, we usually add 's' to the verb",
+                "This is a habitual action happening regularly"
+            ],
+            "type": "verb_conjugation",
+            "difficulty": "beginner",
+            "lesson": "grammar_lesson_1"
+        },
+        {
+            "id": 10,
+            "skill": "grammar",
+            "level": 1,
+            "question": "Identify the adjective in this sentence: 'The intelligent student answered the difficult question.'",
+            "answer": "intelligent",
+            "hints": [
+                "An adjective describes or modifies a noun",
+                "Look for words that tell us more about the student or question",
+                "This word describes what kind of student we're talking about"
+            ],
+            "type": "part_of_speech",
+            "difficulty": "beginner",
+            "lesson": "grammar_lesson_1"
+        },
+        {
+            "id": 11,
+            "skill": "reading_comprehension",
+            "level": 1,
+            "question": "Read: 'Maria loves reading books. She visits the library every weekend to find new stories.' What does Maria do every weekend?",
+            "answer": "visits the library",
+            "hints": [
+                "Look for information about Maria's weekend activities",
+                "The text mentions what she does regularly on weekends",
+                "Focus on the action she performs every weekend"
+            ],
+            "type": "literal_comprehension",
+            "difficulty": "beginner",
+            "lesson": "reading_comprehension_lesson_1"
+        },
+        {
+            "id": 12,
+            "skill": "reading_comprehension",
+            "level": 1,
+            "question": "Based on the text: 'The dark clouds gathered in the sky, and the wind began to blow stronger.' What is likely to happen next?",
+            "answer": "rain",
+            "hints": [
+                "Consider what dark clouds and strong wind usually indicate",
+                "Think about weather patterns and what these signs suggest",
+                "These are common signs that precede a particular weather event"
+            ],
+            "type": "inference",
+            "difficulty": "beginner",
+            "lesson": "reading_comprehension_lesson_1"
+        },
+        {
+            "id": 13,
+            "skill": "reading_comprehension",
+            "level": 1,
+            "question": "What is the main idea of this passage: 'Exercise is important for good health. It helps strengthen muscles, improves heart function, and boosts energy levels.'?",
+            "answer": "exercise benefits health",
+            "hints": [
+                "Look for the central message that connects all the details",
+                "The passage discusses various positive effects of one activity",
+                "Focus on the overall theme rather than specific details"
+            ],
+            "type": "main_idea",
+            "difficulty": "beginner",
+            "lesson": "reading_comprehension_lesson_1"
+        },
+        {
+            "id": 14,
+            "skill": "spelling",
+            "level": 1,
+            "question": "Spell the word that means 'to get knowledge or skill by studying or practicing':",
+            "answer": "learn",
+            "hints": [
+                "This is a fundamental word in education",
+                "It's what students do when they acquire new information",
+                "The word has 5 letters and starts with 'l'"
+            ],
+            "type": "definition_spelling",
+            "difficulty": "beginner",
+            "lesson": "spelling_lesson_1"
+        },
+        {
+            "id": 15,
+            "skill": "spelling",
+            "level": 1,
+            "question": "Correct the spelling: 'The studant was prepareing for the test.'",
+            "answer": "student preparing",
+            "hints": [
+                "Look for two spelling errors in this sentence",
+                "The first error is in the word for a person who studies",
+                "The second error is in the word that means getting ready"
+            ],
+            "type": "error_correction",
+            "difficulty": "beginner",
+            "lesson": "spelling_lesson_1"
+        },
+        {
+            "id": 16,
+            "skill": "spelling",
+            "level": 1,
+            "question": "Spell the word that means 'having the ability to read and write':",
+            "answer": "literate",
+            "hints": [
+                "This word describes someone who has basic reading and writing skills",
+                "It's the opposite of 'illiterate'",
+                "The word starts with 'lit' and has 8 letters"
+            ],
+            "type": "definition_spelling",
+            "difficulty": "beginner",
+            "lesson": "spelling_lesson_1"
+        },
+        {
+            "id": 17,
+            "skill": "writing",
+            "level": 1,
+            "question": "Combine these sentences using a conjunction: 'I studied hard. I passed the test.'",
+            "answer": "I studied hard, so I passed the test",
+            "hints": [
+                "Look for a word that shows cause and effect relationship",
+                "The first sentence explains why the second sentence happened",
+                "Use a conjunction that indicates result or consequence"
+            ],
+            "type": "sentence_combining",
+            "difficulty": "beginner",
+            "lesson": "writing_lesson_1"
+        },
+        {
+            "id": 18,
+            "skill": "writing",
+            "level": 1,
+            "question": "Write a topic sentence for a paragraph about the importance of education:",
+            "answer": "Education is essential for personal and professional success",
+            "hints": [
+                "A topic sentence introduces the main idea of a paragraph",
+                "Focus on why education matters in people's lives",
+                "Make a clear statement about education's value or importance"
+            ],
+            "type": "topic_sentence",
+            "difficulty": "beginner",
+            "lesson": "writing_lesson_1"
+        }
+    ],
+    "skills": [
+        "vocabulary",
+        "grammar",
+        "reading_comprehension",
+        "spelling",
+        "writing"
+    ],
+    "lessons": {
+        "vocabulary": [
+            {
+                "id": "vocabulary_lesson_1",
+                "title": "Vocabulary",
+                "description": "Core practice for this skill."
+            }
+        ],
+        "grammar": [
+            {
+                "id": "grammar_lesson_1",
+                "title": "Grammar",
+                "description": "Core practice for this skill."
+            }
+        ],
+        "reading_comprehension": [
+            {
+                "id": "reading_comprehension_lesson_1",
+                "title": "Reading Comprehension",
+                "description": "Core practice for this skill."
+            }
+        ],
+        "spelling": [
+            {
+                "id": "spelling_lesson_1",
+                "title": "Spelling",
+                "description": "Core practice for this skill."
+            }
+        ],
+        "writing": [
+            {
+                "id": "writing_lesson_1",
+                "title": "Writing",
+                "description": "Core practice for this skill."
+            }
+        ]
+    }
+}
