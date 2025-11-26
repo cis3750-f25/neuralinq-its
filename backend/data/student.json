@@ -1,0 +1,35 @@
+{
+    "Admintest": {
+        "username": "Admintest",
+        "password_hash": "scrypt:32768:8:1$XVId3COuPN3ianXz$1dee58034e8834dfa9c47e98136d3f92905e58a92c4f1fa94173219df77a82bc46060d751967ec4bd7cf865c02aef91c4e2839af9460a9d0c644a9249aeb2a84",
+        "role": "admin",
+        "name": "Admintest",
+        "email": "Admintest@example.com",
+        "level": 1,
+        "language_prefs": {
+            "learn": "english",
+            "ui": "english"
+        },
+        "mastery": {
+            "grammar": 0.0,
+            "reading_comprehension": 0.0,
+            "spelling": 0.0,
+            "vocabulary": 0.0,
+            "writing": 0.0
+        },
+        "metrics": {
+            "total_questions_answered": 0,
+            "correct_answers": 0,
+            "incorrect_answers": 0,
+            "average_time_per_question": 0,
+            "skill_performance": {}
+        },
+        "badges": [],
+        "question_history": [],
+        "current_session": {
+            "question_id": null,
+            "hints_used": 0,
+            "start_time": null
+        }
+    }
+}
