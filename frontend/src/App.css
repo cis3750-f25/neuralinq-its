@@ -5,7 +5,6 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: #f5f7fa;
     margin: 0;
     min-height: 100vh;
 }
@@ -31,9 +30,10 @@ body.dark-mode {
 }
 
 body {
-    background-color: var(--bg-color, #f4f7f6);
+    background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
     color: var(--text-color, #333);
     transition: background-color 0.3s, color 0.3s;
+    background-attachment: fixed;
 }
 
 #root {
@@ -343,6 +343,28 @@ body {
     align-items: flex-start;
 }
 
+.account-type-options {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.account-type-options label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    margin: 0 !important;
+}
+
+.account-type-options input[type="radio"] {
+    width: auto;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
 #login-form .btn {
     width: 100%;
     margin-bottom: 10px;
@@ -378,6 +400,12 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-bottom: none;
     position: relative;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+}
+
+.skills-button {
+    margin-bottom: 8px;
 }
 
 .app-header h1 {
@@ -1223,16 +1251,6 @@ input:checked + .slider:before {
     margin: 0;
     color: #666;
     line-height: 1.5;
-}
-
-/* --- Solid Background Override --- */
-body {
-    background: #f5f7fa !important;
-    animation: none !important;
-}
-
-body.dark-mode {
-    background: #121212 !important;
 }
 
 /* --- Loading Styles --- */
