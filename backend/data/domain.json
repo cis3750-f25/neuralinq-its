@@ -282,36 +282,41 @@
         "vocabulary": [
             {
                 "id": "vocabulary_lesson_1",
-                "title": "Vocabulary",
-                "description": "Core practice for this skill."
+                "title": "Vocabulary - Lesson 1",
+                "description": "Core practice for this skill.",
+                "content": "Lesson text."
             }
         ],
         "grammar": [
             {
                 "id": "grammar_lesson_1",
-                "title": "Grammar",
-                "description": "Core practice for this skill."
+                "title": "Grammar - Lesson 1",
+                "description": "Core practice for this skill.",
+                "content": "Lesson text."
             }
         ],
         "reading_comprehension": [
             {
                 "id": "reading_comprehension_lesson_1",
-                "title": "Reading Comprehension",
-                "description": "Core practice for this skill."
+                "title": "Reading Comprehension - Lesson 1",
+                "description": "Core practice for this skill.",
+                "content": "Lesson text."
             }
         ],
         "spelling": [
             {
                 "id": "spelling_lesson_1",
-                "title": "Spelling",
-                "description": "Core practice for this skill."
+                "title": "Spelling - Lesson 1",
+                "description": "Core practice for this skill.",
+                "content": "Lesson text."
             }
         ],
         "writing": [
             {
                 "id": "writing_lesson_1",
-                "title": "Writing",
-                "description": "Core practice for this skill."
+                "title": "Writing - Lesson 1",
+                "description": "Core practice for this skill.",
+                "content": "Lesson text."
             }
         ]
     }

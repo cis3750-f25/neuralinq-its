@@ -85,7 +85,8 @@ def ensure_lessons(domain_data):
             lessons[skill] = [{
                 'id': f"{skill}_lesson_1",
                 'title': f"{skill.replace('_', ' ').title()}",
-                'description': 'Core practice for this skill.'
+                'description': 'Core practice for this skill.',
+                'content': 'Lesson content.'
             }]
     return lessons
 
@@ -657,6 +658,7 @@ def add_lesson():
     skill = slugify_label(request.json.get('skill', ''))
     lesson_title = request.json.get('title', '').strip()
     description = request.json.get('description', '').strip()
+    content = request.json.get('content', '').strip()
 
     if not skill or not lesson_title:
         return jsonify({"error": "Skill and lesson title are required"}), 400
@@ -673,7 +675,8 @@ def add_lesson():
     new_lesson = {
         'id': lesson_id,
         'title': lesson_title,
-        'description': description or 'Lesson added by admin.'
+        'description': description or 'Lesson added by admin.',
+        'content': content or 'No content provided.'
     }
     skill_lessons.append(new_lesson)
 

@@ -1169,7 +1169,7 @@ input:checked + .slider:before {
 
 .skill-name {
     font-weight: bold;
-    color: #1976d2;
+    color: #333;
 }
 
 .skill-reason {

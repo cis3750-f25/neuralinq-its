@@ -18,6 +18,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
   const [skillLessons, setSkillLessons] = useState([]);
   const [selectedSkill, setSelectedSkill] = useState('');
   const [selectedLesson, setSelectedLesson] = useState(null);
+  const [viewingLessonContent, setViewingLessonContent] = useState(false);
   const [isLoadingSkills, setIsLoadingSkills] = useState(false);
   const [skillLoadError, setSkillLoadError] = useState('');
   const [diagnosticQuestions, setDiagnosticQuestions] = useState([]);
@@ -98,6 +99,8 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
       console.error('Error submitting diagnostic:', error);
     } finally {
       setDiagnosticComplete(true);
+      setSelectedLesson(null);
+      setSelectedSkill('');
     }
   };
 
@@ -134,10 +137,10 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
         student_id: activeStudentId,
         question_id: currentQuestion.id
       });
-      
+
       setCurrentHint(response.data.hint);
       setHintsUsed(response.data.hints_used);
-      
+
       if (response.data.is_answer) {
         // Auto-move to next question after showing answer
         setTimeout(() => {
@@ -152,17 +155,17 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
 
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
-    
+
     if (!currentQuestion.id || !userAnswer.trim()) return;
-    
+
     setIsSubmitting(true);
-    
+
     const isCorrect = userAnswer.toLowerCase().trim() === currentQuestion.answer.toLowerCase();
-    
+
     if (isCorrect) {
       setFeedback('🎉 Excellent! You got it right!');
       createConfetti();
-      
+
       try {
         // Send result to backend
         const response = await axios.post(`${API_BASE}/api/submit-answer`, {
@@ -172,7 +175,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
           question_id: currentQuestion.id,
           is_correct: true
         });
-        
+
         // Check for new badges
         if (response.data.new_badges && response.data.new_badges.length > 0) {
           setNewBadges(response.data.new_badges);
@@ -181,7 +184,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
       } catch (error) {
         console.error('Error submitting answer:', error);
       }
-      
+
       // Get next question after delay
       setTimeout(() => {
         setIsSubmitting(false);
@@ -190,11 +193,11 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
     } else {
       const newWrongAttempts = wrongAttempts + 1;
       setWrongAttempts(newWrongAttempts);
-      
+
       if (newWrongAttempts >= 3) {
         // After 3 wrong attempts, submit as incorrect and move on
         setFeedback(`🤔 The correct answer was: ${currentQuestion.answer}`);
-        
+
         try {
           await axios.post(`${API_BASE}/api/submit-answer`, {
             student_id: activeStudentId,
@@ -206,7 +209,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
         } catch (error) {
           console.error('Error submitting answer:', error);
         }
-        
+
         setTimeout(() => {
           setIsSubmitting(false);
           getNextQuestion();
@@ -247,6 +250,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
 
   const handleLessonSelect = (lesson) => {
     setSelectedLesson(lesson);
+    setViewingLessonContent(true);
   };
 
   const handleDiagnosticSubmit = (e) => {
@@ -302,10 +306,10 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
   }, []);
 
   useEffect(() => {
-    if (selectedLesson) {
+    if (selectedLesson && !viewingLessonContent) {
       getNextQuestion();
     }
-  }, [selectedLesson]);
+  }, [selectedLesson, viewingLessonContent]);
 
   return (
     <div className="app-container">
@@ -323,12 +327,12 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
           {userRole === 'admin' && (
             <Link to="/admin" className="header-link admin-link">🔧 Admin Panel</Link>
           )}
-          <button 
+          <button
             onClick={() => {
               if (window.confirm('Are you sure you want to log out?')) {
                 onLogout();
               }
-            }} 
+            }}
             className="header-link logout-btn"
           >
             🚪 Logout
@@ -385,8 +389,8 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
             {recommendedLessons.length > 0 && (
               <div className="recommend-banner">
                 <div>
-                  <h2>Recommended starting points</h2>
-                  <p className="skill-subtext">Based on your answers, start here.</p>
+                  <h2>Recommended lessons</h2>
+                  <p className="skill-subtext">Based on your estimated knowledge.</p>
                 </div>
                 <div className="skills-list skills-list--vertical">
                   {recommendedLessons.map(({ skill, lesson }) => (
@@ -396,6 +400,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
                       onClick={() => {
                         setSelectedSkill(skill);
                         setSelectedLesson(lesson);
+                        setViewingLessonContent(true);
                       }}
                     >
                       <span className="skill-name">{formatSkillName(skill)}</span>
@@ -408,7 +413,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
 
             {!selectedSkill && (
               <div className="skill-grid">
-                <h2>Choose a skill to practice</h2>
+                <h2>All lessons</h2>
                 {skillLoadError && <p className="incorrect" role="alert">{skillLoadError}</p>}
                 {isLoadingSkills ? (
                   <p>Loading skills...</p>
@@ -454,18 +459,50 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
               </div>
             )}
 
-            {selectedLesson && (
+            {selectedLesson && viewingLessonContent && (
+              <div className="lesson-reading-view">
+                <div className="breadcrumb">
+                  <button className="btn btn-secondary" onClick={() => {
+                    setSelectedLesson(null);
+                    setViewingLessonContent(false);
+                  }}>← Back to Lessons</button>
+                </div>
+
+                <div className="lesson-text-content">
+                  <h2>{selectedLesson.title}</h2>
+                  <p className="lesson-description">{selectedLesson.description}</p>
+                  <div className="lesson-body">
+                    {selectedLesson.content ? (
+                      <p>{selectedLesson.content}</p>
+                    ) : (
+                      <p><em>No lesson content available.</em></p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="action-bar">
+                  <button
+                    className="btn btn-primary btn-large"
+                    onClick={() => {
+                      setViewingLessonContent(false);
+                      getNextQuestion();
+                    }}
+                  >
+                    Start Quiz →
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {selectedLesson && !viewingLessonContent && (
               <>
                 <div id="question-card">
                   <div className="breadcrumb">
                     <button className="btn btn-secondary" onClick={() => setSelectedLesson(null)}>← Lessons</button>
-                    <span className="skill-subtext">{formatSkillName(selectedSkill)} • {selectedLesson.title}</span>
-                  </div>
-                  <h2>
-                    {currentQuestion.skill
+                    <span className="skill-subtext">     {currentQuestion.skill
                       ? `Skill: ${formatSkillName(currentQuestion.skill)}`
-                      : 'Loading...'}
-                  </h2>
+                      : 'Loading...'}</span>
+                  </div>
                   <p>
                     {isLoading ? 'Loading your next question...' : currentQuestion.question}
                   </p>
@@ -534,7 +571,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
                 </div>
               </div>
             ))}
-            <button 
+            <button
               className="btn btn-primary"
               onClick={() => setShowBadgeModal(false)}
             >
