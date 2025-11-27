@@ -103,12 +103,12 @@ const Admin = ({ onLogout, userRole }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.question.trim() || !formData.answer.trim()) {
       showFeedback('Please fill in all fields', true);
       return;
     }
-    
+
     try {
       const response = await axios.post(`${API_BASE}/api/add-question`, formData);
 
@@ -237,26 +237,26 @@ const Admin = ({ onLogout, userRole }) => {
         <Link to="/admin" className="logo-link">
           <h1>Admin Panel</h1>
         </Link>
-        <div>
+        <div className="header-right">
           <Link to="/lesson" className="header-link">👀 View Student Area</Link>
-          <button 
+          <button
             onClick={() => {
               if (window.confirm('Are you sure you want to log out?')) {
                 onLogout();
               }
-            }} 
+            }}
             className="header-link logout-btn"
           >
             🚪 Logout
           </button>
         </div>
       </header>
-      
+
       <div className="admin-content">
         <div className="admin-status">
           <p>✅ <strong>Admin Access Granted</strong> - Intelligent Tutoring System Management</p>
         </div>
-        
+
         <div className="admin-tabs">
           <button
             className={`tab-button ${activeTab === 'add' ? 'active' : ''}`}
@@ -288,7 +288,7 @@ const Admin = ({ onLogout, userRole }) => {
           <div className="tab-content">
             <h2>📝 Add New Question</h2>
             <p>Create new English learning content for the tutoring system.</p>
-            
+
             <div className="admin-form">
               <form onSubmit={handleSubmit}>
                 <div className="input-group">
@@ -327,7 +327,7 @@ const Admin = ({ onLogout, userRole }) => {
                     <small>No lessons yet for this skill. Add one in the Skills tab.</small>
                   )}
                 </div>
-                
+
                 <div className="input-group">
                   <label htmlFor="question">Question</label>
                   <textarea
@@ -339,7 +339,7 @@ const Admin = ({ onLogout, userRole }) => {
                     rows="3"
                   />
                 </div>
-                
+
                 <div className="input-group">
                   <label htmlFor="answer">Correct Answer</label>
                   <input
@@ -351,7 +351,7 @@ const Admin = ({ onLogout, userRole }) => {
                     placeholder="Enter the correct answer..."
                   />
                 </div>
-                
+
                 <button type="submit" className="btn btn-primary">
                   Add Question to System
                 </button>
@@ -364,7 +364,7 @@ const Admin = ({ onLogout, userRole }) => {
           <div className="tab-content">
             <h2>🗂️ Question Management</h2>
             <p>Review and manage existing questions in the system.</p>
-            
+
             {isLoading ? (
               <div className="loading">Loading questions...</div>
             ) : (
@@ -386,7 +386,7 @@ const Admin = ({ onLogout, userRole }) => {
                         <p><strong>A:</strong> {question.answer}</p>
                       </div>
                       <div className="question-actions">
-                        <button 
+                        <button
                           className="btn btn-danger"
                           onClick={() => handleDeleteQuestion(question.id)}
                         >
@@ -443,11 +443,11 @@ const Admin = ({ onLogout, userRole }) => {
         {activeTab === 'skills' && (
           <div className="tab-content">
             <h2>🧠 Skills</h2>
-          <p>Add new learning skills that questions can be mapped to.</p>
+            <p>Add new learning skills that questions can be mapped to.</p>
 
-          <form className="admin-form" onSubmit={handleAddSkill}>
-            <div className="input-group">
-              <label htmlFor="newSkill">Skill Name</label>
+            <form className="admin-form" onSubmit={handleAddSkill}>
+              <div className="input-group">
+                <label htmlFor="newSkill">Skill Name</label>
                 <input
                   id="newSkill"
                   value={newSkill}
@@ -514,7 +514,7 @@ const Admin = ({ onLogout, userRole }) => {
             </div>
           </div>
         )}
-        
+
         {feedback && (
           <div className="admin-feedback">
             <div className={`feedback-box ${feedback.isError ? 'incorrect' : 'correct'}`}>
@@ -522,7 +522,7 @@ const Admin = ({ onLogout, userRole }) => {
             </div>
           </div>
         )}
-        
+
         <div className="admin-info">
           <h3>📊 System Status</h3>
           <p>✅ Backend API: Connected</p>

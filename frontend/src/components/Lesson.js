@@ -323,9 +323,9 @@ const Lesson = ({ onLogout, userRole, studentId, initialDiagnosticComplete, onDi
           <Link to="/lesson" className="logo-link">
             <h1>Grade 2 Lessons</h1>
           </Link>
-          {userRole === 'admin' && <span className="role-badge">Admin Mode</span>}
         </div>
-        <div>
+        <div className="header-right">
+          {userRole === 'admin' && <span className="role-badge">Admin Mode</span>}
           <Link to="/profile" className="header-link">My Progress</Link>
           <Link to="/results" className="header-link">📋 Results</Link>
           <Link to="/settings" className="header-link settings-icon">⚙️</Link>

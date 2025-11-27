@@ -10,9 +10,12 @@ body {
 }
 
 @keyframes gradientShift {
-    0%, 100% {
+
+    0%,
+    100% {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
+
     50% {
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     }
@@ -110,8 +113,8 @@ body {
     width: 100%;
 }
 
-.btn-danger:hover { 
-    background-color: #c00; 
+.btn-danger:hover {
+    background-color: #c00;
 }
 
 .input-group {
@@ -179,6 +182,7 @@ body {
         transform: translateX(100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -204,6 +208,7 @@ body {
         transform: translateY(30px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -258,18 +263,24 @@ body {
 }
 
 @keyframes logoFloat {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px) rotate(0deg);
     }
+
     50% {
         transform: translateY(-10px) rotate(2deg);
     }
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-20px);
     }
@@ -303,9 +314,12 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0.7;
     }
+
     50% {
         opacity: 1;
     }
@@ -534,6 +548,7 @@ body {
         transform: translateY(-30px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -575,6 +590,7 @@ body {
         transform: translateY(30px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -678,7 +694,7 @@ body {
     margin-bottom: 20px;
 }
 
-.settings-card h2 { 
+.settings-card h2 {
     margin-top: 0;
     color: var(--text-color, #333);
 }
@@ -702,12 +718,12 @@ body {
     margin-top: 20px;
 }
 
-.feedback-box.correct { 
-    color: green; 
+.feedback-box.correct {
+    color: green;
 }
 
-.feedback-box.incorrect { 
-    color: red; 
+.feedback-box.incorrect {
+    color: red;
 }
 
 /* --- Toggle Switch --- */
@@ -746,11 +762,11 @@ body {
     transition: .4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
     background-color: #007aff;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
     transform: translateX(26px);
 }
 
@@ -859,7 +875,9 @@ input:checked + .slider:before {
     #question-card p {
         font-size: 20px;
     }
-}/* -
+}
+
+/* -
 -- Hint Styles --- */
 .hint-box {
     background: rgba(255, 193, 7, 0.1);
@@ -954,6 +972,7 @@ input:checked + .slider:before {
         transform: translateY(50px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -961,12 +980,19 @@ input:checked + .slider:before {
 }
 
 @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
         transform: translateY(0);
     }
+
     40% {
         transform: translateY(-10px);
     }
+
     60% {
         transform: translateY(-5px);
     }
@@ -1277,22 +1303,23 @@ section h2 {
 
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
+
     .badges-grid,
     .stats-grid,
     .skills-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .button-group {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .badge-modal {
         width: 95%;
         padding: 20px;
     }
-    
+
     .new-badge {
         flex-direction: column;
         text-align: center;
@@ -1304,6 +1331,7 @@ section h2 {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -1311,7 +1339,9 @@ section h2 {
 
 .fade-in {
     animation: fadeIn 0.3s ease-in;
-}/* ---
+}
+
+/* ---
  Admin Interface Styles --- */
 .admin-tabs {
     display: flex;
@@ -1559,26 +1589,28 @@ section h2 {
     .admin-tabs {
         flex-direction: column;
     }
-    
+
     .tab-button {
         border-radius: 8px;
         margin-bottom: 5px;
     }
-    
+
     .question-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
-    
+
     .question-actions {
         justify-content: center;
     }
-    
+
     .admin-form {
         padding: 20px;
     }
-}/* --
+}
+
+/* --
 - Warning Button Style --- */
 .btn-warning {
     background: #ffc107;
@@ -1625,7 +1657,9 @@ section h2 {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-}/*
+}
+
+/*
  --- Fix Layout Issues --- */
 .profile-content {
     margin-top: 0 !important;
@@ -1641,12 +1675,12 @@ section h2 {
     display: block !important;
 }
 
-.app-header + .profile-content,
-.app-header + .lesson-content,
-.app-header + .admin-content,
-.app-header + .badges-content,
-.app-header + .metrics-content,
-.app-header + .settings-content {
+.app-header+.profile-content,
+.app-header+.lesson-content,
+.app-header+.admin-content,
+.app-header+.badges-content,
+.app-header+.metrics-content,
+.app-header+.settings-content {
     margin-top: 0 !important;
     padding-top: 20px !important;
 }
@@ -1656,7 +1690,8 @@ section h2 {
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     background: #f5f7fa;
@@ -1665,7 +1700,9 @@ html, body {
 #root {
     margin: 0;
     padding: 0;
-}/* 
+}
+
+/* 
 --- Beautiful Profile Design --- */
 body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
@@ -1716,12 +1753,25 @@ body {
     border-radius: 6px;
     transition: width 0.8s ease;
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-}/
-* --- Enhanced Header Design --- */
+}
+
+/* --- Enhanced Header Design --- */
 .app-header {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%) !important;
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .app-header h1 {
@@ -1752,7 +1802,7 @@ body {
     margin-bottom: 10px;
 }
 
-.profile-content > p {
+.profile-content>p {
     text-align: center;
     color: #666;
     font-size: 16px;
@@ -1768,6 +1818,7 @@ body {
     from {
         width: 0%;
     }
+
     to {
         width: var(--progress-width);
     }
@@ -1786,7 +1837,9 @@ body {
     text-transform: uppercase;
     letter-spacing: 1px;
     opacity: 0.9;
-}/* --
+}
+
+/* --
 - Results Page Styles --- */
 .results-content {
     max-width: 1200px;
@@ -1986,7 +2039,8 @@ body {
     color: #666;
 }
 
-.time-stat, .hints-stat {
+.time-stat,
+.hints-stat {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -2095,22 +2149,24 @@ body {
     .summary-cards {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .question-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
-    
+
     .question-stats {
         flex-direction: column;
         gap: 5px;
     }
-    
+
     .retry-actions {
         flex-direction: column;
     }
-}/* --- Logo
+}
+
+/* --- Logo
  Link Styles --- */
 .logo-link {
     text-decoration: none;
