@@ -252,7 +252,8 @@ def create_new_student_profile(username, password, role="student"):
             "question_id": None,
             "hints_used": 0,
             "start_time": None
-        }
+        },
+        "diagnostic_complete": False
     }
 
 def check_badge_eligibility(student_data, student_id):
@@ -334,7 +335,13 @@ def register():
     student_data[username] = create_new_student_profile(username, password, role)
     write_json_file(STUDENT_FILE, student_data)
 
-    return jsonify({"success": True, "message": "Registration successful", "student_id": username, "role": role})
+    return jsonify({
+        "success": True, 
+        "message": "Registration successful", 
+        "student_id": username, 
+        "role": role,
+        "diagnostic_complete": False
+    })
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -355,7 +362,12 @@ def login():
     if 'password_hash' not in student or not check_password_hash(student['password_hash'], password):
         return jsonify({"error": "Invalid username or password"}), 401
 
-    return jsonify({"success": True, "student_id": username, "role": student.get('role', 'student')})
+    return jsonify({
+        "success": True, 
+        "student_id": username, 
+        "role": student.get('role', 'student'),
+        "diagnostic_complete": student.get('diagnostic_complete', False)
+    })
 @app.route('/api/get-question', methods=['POST'])
 def get_question():
     """Get next question based on student's mastery and level."""
@@ -780,6 +792,11 @@ def submit_diagnostic():
             'lesson': lesson_list[0]
         })
 
+    write_json_file(STUDENT_FILE, student_data)
+    write_json_file(DOMAIN_FILE, domain_data)
+
+    # Mark diagnostic as complete
+    student['diagnostic_complete'] = True
     write_json_file(STUDENT_FILE, student_data)
     write_json_file(DOMAIN_FILE, domain_data)
 

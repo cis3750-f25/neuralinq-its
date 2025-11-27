@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const API_BASE = 'http://localhost:5000';
 
-const Lesson = ({ onLogout, userRole, studentId }) => {
+const Lesson = ({ onLogout, userRole, studentId, initialDiagnosticComplete, onDiagnosticComplete }) => {
   const [currentQuestion, setCurrentQuestion] = useState({});
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
@@ -25,7 +25,9 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
   const [diagnosticIndex, setDiagnosticIndex] = useState(0);
   const [diagnosticResponses, setDiagnosticResponses] = useState([]);
   const [diagnosticAnswer, setDiagnosticAnswer] = useState('');
-  const [diagnosticComplete, setDiagnosticComplete] = useState(userRole === 'admin');
+  const [diagnosticComplete, setDiagnosticComplete] = useState(
+    userRole === 'admin' || initialDiagnosticComplete
+  );
   const [diagnosticLoading, setDiagnosticLoading] = useState(false);
   const [diagnosticError, setDiagnosticError] = useState('');
   const [recommendedLessons, setRecommendedLessons] = useState([]);
@@ -99,6 +101,9 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
       console.error('Error submitting diagnostic:', error);
     } finally {
       setDiagnosticComplete(true);
+      if (onDiagnosticComplete) {
+        onDiagnosticComplete();
+      }
       setSelectedLesson(null);
       setSelectedSkill('');
     }
@@ -438,7 +443,7 @@ const Lesson = ({ onLogout, userRole, studentId }) => {
               <div className="skill-grid">
                 <div className="skill-grid__header">
                   <h2>{formatSkillName(selectedSkill)} lessons</h2>
-                  <button className="btn btn-secondary" onClick={() => setSelectedSkill('')}>← All skills</button>
+                  <button className="btn btn-secondary skills-button" onClick={() => setSelectedSkill('')}>← All skills</button>
                 </div>
                 {lessonsForSelectedSkill.length === 0 ? (
                   <p>No lessons yet for this skill.</p>

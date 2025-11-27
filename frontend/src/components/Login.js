@@ -45,7 +45,7 @@ const Login = ({ onLogin }) => {
         });
 
         if (response.data.success) {
-          onLogin(response.data.role, response.data.student_id);
+          onLogin(response.data.role, response.data.student_id, response.data.diagnostic_complete);
         }
       }
     } catch (err) {
@@ -177,23 +177,23 @@ const Login = ({ onLogin }) => {
               {isRegistering ? 'Register' : 'Sign In'}
             </button>
 
-              <div style={{ marginTop: '15px', textAlign: 'center' }}>
-                <button
-                  type="button"
-                  className="btn-link"
-                  style={{ background: 'none', border: 'none', color: '#007bff', cursor: 'pointer', textDecoration: 'underline' }}
-                  onClick={() => {
-                    setIsRegistering(!isRegistering);
-                    setError('');
-                    setSuccessMsg('');
-                    setAdminCode('');
-                    setAccountType('student');
-                  }}
-                >
-                  {isRegistering ? 'Already have an account? Sign In' : 'Need an account? Register'}
-                </button>
-              </div>
-            </form>
+            <div style={{ marginTop: '15px', textAlign: 'center' }}>
+              <button
+                type="button"
+                className="btn-link"
+                style={{ background: 'none', border: 'none', color: '#007bff', cursor: 'pointer', textDecoration: 'underline' }}
+                onClick={() => {
+                  setIsRegistering(!isRegistering);
+                  setError('');
+                  setSuccessMsg('');
+                  setAdminCode('');
+                  setAccountType('student');
+                }}
+              >
+                {isRegistering ? 'Already have an account? Sign In' : 'Need an account? Register'}
+              </button>
+            </div>
+          </form>
 
           {!isRegistering && (
             <div className="demo-credentials">

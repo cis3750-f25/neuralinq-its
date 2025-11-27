@@ -15,6 +15,7 @@ function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState('student');
   const [studentId, setStudentId] = useState('');
+  const [diagnosticComplete, setDiagnosticComplete] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [key, setKey] = useState(0); // Force re-render key
 
@@ -27,11 +28,12 @@ function AppContent() {
     }
   }, []);
 
-  const handleLogin = (role, id) => {
-    console.log('Login attempt with role:', role, 'id:', id);
+  const handleLogin = (role, id, isDiagnosticComplete) => {
+    console.log('Login attempt with role:', role, 'id:', id, 'diagnostic:', isDiagnosticComplete);
     setIsLoggedIn(true);
     setUserRole(role);
     setStudentId(id);
+    setDiagnosticComplete(isDiagnosticComplete);
     setKey(prev => prev + 1); // Force fresh routing
 
     // Clear any existing navigation history
@@ -78,7 +80,13 @@ function AppContent() {
         />
         <Route
           path="/lesson"
-          element={<Lesson onLogout={handleLogout} userRole={userRole} studentId={studentId} />}
+          element={<Lesson
+            onLogout={handleLogout}
+            userRole={userRole}
+            studentId={studentId}
+            initialDiagnosticComplete={diagnosticComplete}
+            onDiagnosticComplete={() => setDiagnosticComplete(true)}
+          />}
         />
         <Route
           path="/profile"
