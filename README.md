@@ -1,4 +1,4 @@
-# 🎓 NeuraLinq ITS - AI-Powered Intelligent Tutoring System
+# 🎓 Neuralinq ITS - AI-Powered Intelligent Tutoring System
 
 > A sophisticated educational platform leveraging Google Gemini AI for personalized learning experiences
 
@@ -26,7 +26,7 @@
 
 ## 🌟 Overview
 
-NeuraLinq ITS is an advanced Intelligent Tutoring System that combines traditional educational methodologies with cutting-edge AI technology. Built as a university project, it demonstrates the practical application of artificial intelligence in personalized education.
+Neuralinq ITS is an advanced Intelligent Tutoring System that combines traditional educational methodologies with cutting-edge AI technology. Built as a university project, it demonstrates the practical application of artificial intelligence in personalized education.
 
 ### What Makes It Special?
 
@@ -234,14 +234,14 @@ def select_next_question(student_mastery, available_questions):
 ## 🏗️ System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Frontend (React)                        │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
-│  │  Login   │  │  Lesson  │  │  Admin   │  │   AI     │  │
-│  │Component │  │Component │  │  Panel   │  │Generator │  │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
-│         │              │              │              │      │
-│         └──────────────┴──────────────┴──────────────┘      │
+┌──────────────────────────────────────────────────────────-───┐
+│                     Frontend (React)                         │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐      │
+│  │  Login   │  │  Lesson  │  │  Admin   │  │   AI     │      │
+│  │Component │  │Component │  │  Panel   │  │Generator │      │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘      │
+│         │              │              │              │       │
+│         └──────────────┴──────────────┴──────────────┘       │
 │                        │                                     │
 │                   Axios HTTP                                 │
 └────────────────────────┼─────────────────────────────────────┘
@@ -250,18 +250,18 @@ def select_next_question(student_mastery, available_questions):
                          │
 ┌────────────────────────┼─────────────────────────────────────┐
 │                  Backend (Flask)                             │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │              API Routes                               │  │
-│  │  /api/login  /api/get-question  /api/ai/generate    │  │
-│  └──────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐    │
+│  │              API Routes                              │    │
+│  │  /api/login  /api/get-question  /api/ai/generate     │    │
+│  └──────────────────────────────────────────────────────┘    │
 │         │                    │                    │          │
-│  ┌──────▼──────┐      ┌─────▼─────┐      ┌──────▼──────┐  │
-│  │   Student   │      │  Question │      │     AI      │  │
-│  │  Management │      │  Selector │      │  Generator  │  │
-│  └─────────────┘      └───────────┘      └─────────────┘  │
+│  ┌──────▼──────┐      ┌─────▼─────┐      ┌──────▼──────┐     │
+│  │   Student   │      │  Question │      │     AI      │     │
+│  │  Management │      │  Selector │      │  Generator  │     │
+│  └─────────────┘      └───────────┘      └─────────────┘     │
 │         │                    │                    │          │
 │         └────────────────────┴────────────────────┘          │
-│                              │                                │
+│                              │                               │
 │                    ┌─────────▼─────────┐                     │
 │                    │  Data Layer       │                     │
 │                    │  (JSON Files)     │                     │
@@ -300,7 +300,7 @@ def select_next_question(student_mastery, available_questions):
 ```bash
 git clone https://github.com/yourusername/neuralinq-its.git
 cd neuralinq-its
-setup.bat
+run.bat
 ```
 
 **Linux/Mac:**
@@ -312,8 +312,8 @@ chmod +x setup.sh
 ```
 
 The setup script will:
-1. Install Python dependencies
-2. Install Node.js dependencies
+1. Check for and install Python dependencies if missing
+2. Check for and install Node.js dependencies  if missing
 3. Create environment files
 4. Start both servers automatically
 
