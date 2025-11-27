@@ -29,7 +29,12 @@ const Settings = ({ onLogout, darkMode, toggleDarkMode, userRole, studentId }) =
   const loadStudentData = async () => {
     try {
       const response = await axios.get(`${API_BASE}/api/student-data?student_id=${studentId}`);
-      setStudentData(response.data);
+      const data = {
+        name: response.data.name,
+        email: response.data.email,
+        language_prefs: response.data.language_prefs
+      };
+      setStudentData(data);
     } catch (error) {
       console.error('Error loading student data:', error);
     }

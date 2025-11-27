@@ -1033,7 +1033,8 @@ def get_all_questions():
 def get_student_data():
     """Get complete student data for frontend."""
     student_data = read_json_file(STUDENT_FILE)
-    return jsonify(student_data.get('student_alex', {}))
+    student_id = request.json.get('student_id', 'student_alex')
+    return jsonify(student_data.get(student_id, {}))
 
 @app.route('/api/get-hint', methods=['POST'])
 def get_hint():
