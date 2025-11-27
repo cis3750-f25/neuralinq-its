@@ -36,6 +36,20 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
+#root {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.App {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .btn {
     padding: 14px 28px;
     border: none;
