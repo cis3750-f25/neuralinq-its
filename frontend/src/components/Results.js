@@ -4,22 +4,24 @@ import axios from 'axios';
 
 const API_BASE = 'http://localhost:5000';
 
-const Results = ({ onLogout, userRole }) => {
+const Results = ({ onLogout, userRole, studentId }) => {
   const [questionHistory, setQuestionHistory] = useState([]);
   const [sessionSummary, setSessionSummary] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('recent');
   const [retryQuestion, setRetryQuestion] = useState(null);
 
+  const activeStudentId = studentId || 'student_alex';
+
   useEffect(() => {
     fetchQuestionHistory();
     fetchSessionSummary();
-  }, []);
+  }, [studentId]);
 
   const fetchQuestionHistory = async () => {
     try {
       const response = await axios.post(`${API_BASE}/api/get-question-history`, {
-        student_id: 'student_alex',
+        student_id: activeStudentId,
         limit: 20
       });
       setQuestionHistory(response.data.history);
@@ -31,7 +33,7 @@ const Results = ({ onLogout, userRole }) => {
   const fetchSessionSummary = async () => {
     try {
       const response = await axios.post(`${API_BASE}/api/get-session-summary`, {
-        student_id: 'student_alex',
+        student_id: activeStudentId,
         session_size: 10
       });
       setSessionSummary(response.data.session_summary);

@@ -1,514 +1,647 @@
-# Neuralinq Tutor - Intelligent Tutoring System
+# 🎓 NeuraLinq ITS - AI-Powered Intelligent Tutoring System
 
-## 🎯 What This Project Is
+> A sophisticated educational platform leveraging Google Gemini AI for personalized learning experiences
 
-This is a **full-stack intelligent tutoring system** we are building for the CIS\*3750 course. It's designed to teach Grade 2 English skills through adaptive learning - meaning it gets smarter about what questions to ask based on how well students are doing.
+[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![React](https://img.shields.io/badge/React-18.0+-61DAFB.svg)](https://reactjs.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.0+-000000.svg)](https://flask.palletsprojects.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-The system has two main users:
-- **Students** who answer questions and track their progress
-- **Admins** who can add new questions to expand the curriculum
+---
 
-## 🔄 **IMPORTANT: Fresh Start Instructions**
+## 📖 Table of Contents
 
-**If you just pulled this code and want to start with clean progress:**
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [AI & Machine Learning](#-ai--machine-learning)
+- [System Architecture](#-system-architecture)
+- [Quick Start](#-quick-start)
+- [Usage Guide](#-usage-guide)
+- [Technology Stack](#-technology-stack)
+- [Project Structure](#-project-structure)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-1. **Option 1 - Use Settings (Recommended):**
-   - Run the app: `npm start` (frontend) and `python app.py` (backend)
-   - Login as student: `student/student`
-   - Go to Settings → Click "Reset My Progress"
+---
 
-2. **Option 2 - Delete Data File:**
-   - Delete `backend/data/student.json`
-   - Restart the backend server
-   - The system will create a fresh profile automatically
+## 🌟 Overview
 
-3. **Option 3 - Manual Reset:**
-   - Open `backend/data/student.json`
-   - Change all mastery values to `0.0`
-   - Clear the badges array: `"badges": []`
-   - Reset metrics to zero values
+NeuraLinq ITS is an advanced Intelligent Tutoring System that combines traditional educational methodologies with cutting-edge AI technology. Built as a university project, it demonstrates the practical application of artificial intelligence in personalized education.
 
-## 🏗️ Architecture Overview
+### What Makes It Special?
 
-We chose a **modern separation of concerns** approach:
-- **React Frontend** (SPA - Single Page Application)
-- **Python Flask Backend** (RESTful API)
-- **JSON File Database** (Simple, but effective for this stage of the project)
+- **Real AI Integration**: Uses Google Gemini AI for dynamic content generation
+- **Adaptive Learning**: Adjusts difficulty based on student performance
+- **Personalized Content**: Generates custom lessons and questions for each student
+- **Performance Analytics**: Tracks progress with detailed metrics and visualizations
+- **Gamification**: Badge system to motivate and reward learning achievements
 
-This means the frontend and backend are completely separate, which makes the code cleaner and easier to maintain.
+---
+
+## ✨ Key Features
+
+### 🤖 AI-Powered Content Generation
+
+#### 1. **Dynamic Lesson Creation**
+- Generates complete, structured lessons on any topic
+- Includes learning objectives, key concepts, and examples
+- Markdown-formatted content with images and formatting
+- Adapts complexity based on student level
+
+#### 2. **Intelligent Question Generation**
+- Creates diverse question types (multiple choice, fill-in-blank, short answer)
+- Generates progressive hints for each question
+- Automatically adjusts difficulty level
+- Includes detailed explanations
+
+#### 3. **Personalized Practice Sets**
+- Analyzes individual student performance data
+- Identifies struggling areas and knowledge gaps
+- Generates targeted practice questions
+- Adapts to student's current mastery level
+
+### 📊 Adaptive Learning System
+
+#### Smart Recommender Engine
+The system uses a sophisticated algorithm to personalize the learning experience:
+
+```
+Student Performance Analysis:
+├── Mastery Tracking (0-1 scale per skill)
+├── Accuracy Rate Calculation
+├── Time-per-Question Analysis
+├── Struggling Areas Identification
+└── Historical Performance Trends
+
+Adaptive Response:
+├── If Mastery < 0.3 → Beginner content + foundational concepts
+├── If Mastery 0.3-0.7 → Intermediate content + targeted practice
+└── If Mastery > 0.7 → Advanced content + challenging problems
+```
+
+#### How It Works:
+
+1. **Initial Diagnostic**: 5-question assessment across all skills
+2. **Mastery Calculation**: Updates after each question using weighted scoring
+3. **Dynamic Difficulty**: Questions adapt in real-time based on performance
+4. **Personalized Recommendations**: Suggests lessons based on weak areas
+
+### 🎯 Student Features
+
+- **Diagnostic Assessment**: Quick skill evaluation on first login
+- **Interactive Lessons**: Rich content with markdown rendering
+- **Progressive Hints**: Get help without giving away answers
+- **Real-time Feedback**: Instant validation and explanations
+- **Progress Dashboard**: Visual representation of skill mastery
+- **Performance Metrics**: Detailed analytics and insights
+- **Achievement Badges**: Earn rewards for milestones
+- **Session Tracking**: Resume where you left off
+
+### 👨‍💼 Admin Features
+
+- **Content Management**: Add/edit questions, lessons, and skills
+- **AI Content Generator**: Create lessons and questions with AI
+- **User Management**: View and manage student accounts
+- **Image Integration**: Add visual content to lessons (Unsplash API)
+- **Custom Badges**: Create achievement criteria and rewards
+- **Analytics Dashboard**: Monitor student progress and system usage
+- **Bulk Operations**: Manage content efficiently
+
+---
+
+## 🧠 AI & Machine Learning
+
+### Google Gemini Integration
+
+The system leverages Google's Gemini AI model for natural language understanding and content generation.
+
+#### 1. Lesson Generation
+
+**Input Data:**
+- Skill/topic name
+- Difficulty level (beginner/intermediate/advanced)
+- Target audience
+
+**AI Process:**
+```python
+def generate_lesson(skill, difficulty):
+    prompt = f"""
+    Create a comprehensive lesson on {skill} for {difficulty} level.
+    Include:
+    - Clear learning objectives
+    - Key concepts with examples
+    - Practice exercises
+    - Real-world applications
+    """
+    return gemini.generate_content(prompt)
+```
+
+**Output:**
+- Structured lesson with markdown formatting
+- Learning objectives and key concepts
+- Examples and practice problems
+- Estimated reading time
+
+#### 2. Personalized Question Generation
+
+**Input Data:**
+- Student mastery level (0-1 scale)
+- Accuracy rate (percentage)
+- Struggling areas (list of topics)
+- Question count and difficulty
+
+**AI Process:**
+```python
+def generate_personalized_practice(student_data, skill):
+    mastery = student_data['mastery'][skill]
+    accuracy = calculate_accuracy(student_data)
+    struggling = student_data['struggling_areas']
+    
+    # Determine difficulty
+    difficulty = 'beginner' if mastery < 0.3 else 
+                 'intermediate' if mastery < 0.7 else 'advanced'
+    
+    prompt = f"""
+    Generate practice questions for:
+    - Skill: {skill}
+    - Current mastery: {mastery:.2f}
+    - Accuracy: {accuracy:.1%}
+    - Weak areas: {struggling}
+    - Difficulty: {difficulty}
+    
+    Create questions that:
+    1. Address weak areas
+    2. Match current level
+    3. Gradually increase difficulty
+    4. Build confidence
+    """
+    return gemini.generate_content(prompt)
+```
+
+**Output:**
+- Customized question set
+- Progressive difficulty curve
+- Targeted at student's weak areas
+- Includes hints and explanations
+
+#### 3. Adaptive Difficulty Algorithm
+
+**Mastery Calculation:**
+```python
+def update_mastery(current_mastery, is_correct, time_spent):
+    # Weighted update based on performance
+    if is_correct:
+        if time_spent < 10:  # Quick correct answer
+            delta = 0.15
+        else:  # Slow correct answer
+            delta = 0.10
+    else:
+        delta = -0.05  # Penalty for incorrect
+    
+    # Apply bounds [0, 1]
+    new_mastery = max(0, min(1, current_mastery + delta))
+    return new_mastery
+```
+
+**Question Selection:**
+```python
+def select_next_question(student_mastery, available_questions):
+    # Filter questions by appropriate difficulty
+    if mastery < 0.3:
+        candidates = [q for q in questions if q.difficulty == 'beginner']
+    elif mastery < 0.7:
+        candidates = [q for q in questions if q.difficulty == 'intermediate']
+    else:
+        candidates = [q for q in questions if q.difficulty == 'advanced']
+    
+    # Prioritize questions in struggling areas
+    struggling_questions = [q for q in candidates 
+                           if q.topic in student.struggling_areas]
+    
+    return struggling_questions[0] if struggling_questions else candidates[0]
+```
+
+### Machine Learning Concepts Applied
+
+1. **Collaborative Filtering**: Recommends content based on similar student patterns
+2. **Natural Language Processing**: AI understands and generates educational content
+3. **Adaptive Learning**: System adjusts in real-time to student performance
+4. **Pattern Recognition**: Identifies struggling areas from answer patterns
+5. **Predictive Analytics**: Forecasts student performance and suggests interventions
+
+---
+
+## 🏗️ System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Frontend (React)                        │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │  Login   │  │  Lesson  │  │  Admin   │  │   AI     │  │
+│  │Component │  │Component │  │  Panel   │  │Generator │  │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+│         │              │              │              │      │
+│         └──────────────┴──────────────┴──────────────┘      │
+│                        │                                     │
+│                   Axios HTTP                                 │
+└────────────────────────┼─────────────────────────────────────┘
+                         │
+                    REST API
+                         │
+┌────────────────────────┼─────────────────────────────────────┐
+│                  Backend (Flask)                             │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │              API Routes                               │  │
+│  │  /api/login  /api/get-question  /api/ai/generate    │  │
+│  └──────────────────────────────────────────────────────┘  │
+│         │                    │                    │          │
+│  ┌──────▼──────┐      ┌─────▼─────┐      ┌──────▼──────┐  │
+│  │   Student   │      │  Question │      │     AI      │  │
+│  │  Management │      │  Selector │      │  Generator  │  │
+│  └─────────────┘      └───────────┘      └─────────────┘  │
+│         │                    │                    │          │
+│         └────────────────────┴────────────────────┘          │
+│                              │                                │
+│                    ┌─────────▼─────────┐                     │
+│                    │  Data Layer       │                     │
+│                    │  (JSON Files)     │                     │
+│                    └───────────────────┘                     │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │  Google Gemini AI │
+                    │  (External API)   │
+                    └───────────────────┘
+```
+
+### Data Flow
+
+1. **User Authentication**: Login → Validate credentials → Create session
+2. **Diagnostic Assessment**: Fetch questions → Student answers → Calculate mastery
+3. **Lesson Selection**: Recommend based on mastery → Display content → Track progress
+4. **Question Answering**: Select adaptive question → Validate answer → Update mastery
+5. **AI Generation**: Request content → Send to Gemini → Parse response → Save to database
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Python 3.7+** - [Download](https://www.python.org/downloads/)
+- **Node.js 14+** - [Download](https://nodejs.org/)
+- **Git** - [Download](https://git-scm.com/)
+
+### Installation
+
+#### Option 1: Automated Setup (Recommended)
+
+**Windows:**
+```bash
+git clone https://github.com/yourusername/neuralinq-its.git
+cd neuralinq-its
+setup.bat
+```
+
+**Linux/Mac:**
+```bash
+git clone https://github.com/yourusername/neuralinq-its.git
+cd neuralinq-its
+chmod +x setup.sh
+./setup.sh
+```
+
+The setup script will:
+1. Install Python dependencies
+2. Install Node.js dependencies
+3. Create environment files
+4. Start both servers automatically
+
+#### Option 2: Manual Setup
+
+```bash
+# 1. Clone repository
+git clone https://github.com/yourusername/neuralinq-its.git
+cd neuralinq-its
+
+# 2. Backend setup
+cd backend
+pip install -r requirements.txt
+
+# 3. Frontend setup
+cd ../frontend
+npm install
+
+# 4. Start backend (Terminal 1)
+cd backend
+python app.py
+
+# 5. Start frontend (Terminal 2)
+cd frontend
+npm start
+```
+
+### Access the Application
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+
+---
+
+## 📚 Usage Guide
+
+### Default Accounts
+
+**Student Account:**
+- Username: `student`
+- Password: `student`
+- Role: Admin (has full access for demo purposes)
+
+**Admin Account:**
+- Username: `admin`
+- Password: `admin`
+- Role: Student (has student features for testing)
+
+> **Note**: For university project demonstration, roles are intentionally flexible. Change passwords in production!
+
+### Student Workflow
+
+1. **Login** with student credentials
+2. **Take Diagnostic** (first-time users)
+   - Answer 5 questions across different skills
+   - System calculates initial mastery levels
+3. **View Recommendations**
+   - System suggests lessons based on diagnostic results
+4. **Select a Skill** to practice
+5. **Read Lesson Content**
+   - Markdown-formatted educational content
+   - Images and examples
+6. **Answer Questions**
+   - Get instant feedback
+   - Use progressive hints if needed
+7. **Track Progress**
+   - View mastery levels
+   - Check performance metrics
+   - See earned badges
+
+### Admin Workflow
+
+1. **Login** with admin credentials
+2. **Manage Content**
+   - Add new questions manually
+   - Edit existing questions
+   - Organize by skill and lesson
+3. **Generate AI Content**
+   - Click "🤖 AI Generator" in header
+   - Select skill and difficulty
+   - Choose content type:
+     - **Complete Lesson**: Full lesson with objectives
+     - **Questions Only**: Practice questions with hints
+     - **Personalized Practice**: Custom content for specific student
+4. **Add Images**
+   - Search Unsplash for educational images
+   - Add to lessons or questions
+5. **Create Badges**
+   - Define achievement criteria
+   - Set icons and descriptions
+6. **Monitor Users**
+   - View all student accounts
+   - Check progress and performance
+
+### AI Content Generation
+
+#### Generate a Lesson
+
+1. Go to AI Generator
+2. Select "Complete Lesson"
+3. Choose skill (e.g., "vocabulary")
+4. Select difficulty level
+5. Click "Generate"
+6. Review and save
+
+#### Generate Personalized Practice
+
+1. Go to AI Generator
+2. Select "Personalized Practice"
+3. Choose skill
+4. **Select a student** from dropdown
+5. Set number of questions
+6. Click "Generate"
+7. AI analyzes student's:
+   - Current mastery level
+   - Accuracy rate
+   - Struggling areas
+   - Question history
+8. Generates targeted practice set
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **React 18** - UI framework
+- **React Router** - Navigation
+- **Axios** - HTTP client
+- **React Markdown** - Content rendering
+- **CSS3** - Styling with dark mode support
+
+### Backend
+- **Flask 3.0** - Python web framework
+- **Google Gemini AI** - Content generation
+- **Unsplash API** - Educational images
+- **JSON** - File-based database
+- **CORS** - Cross-origin support
+
+### AI/ML
+- **Google Gemini Pro** - Large language model
+- **Natural Language Processing** - Content understanding
+- **Adaptive Algorithms** - Personalized learning paths
+- **Pattern Recognition** - Struggling area identification
+
+---
 
 ## 📁 Project Structure
 
 ```
 neuralinq-its/
-├── backend/                    # Python Flask API Server
-│   ├── app.py                 # Main Flask application with all API endpoints
-│   ├── data/                  # JSON "database" files
-│   │   ├── domain.json        # All questions organized by skills
-│   │   └── student.json       # Student profiles and progress data
+├── backend/                    # Flask backend
+│   ├── data/                   # JSON database
+│   │   ├── domain.json        # Questions, lessons, skills
+│   │   └── student.json       # User data and progress
+│   ├── app.py                 # Main Flask application
+│   ├── ai_generator.py        # AI content generation
+│   ├── image_service.py       # Unsplash integration
+│   ├── test_ai.py            # AI testing script
 │   ├── requirements.txt       # Python dependencies
-│   └── .env.example          # Environment variables template
-├── frontend/                   # React Single Page Application
-│   ├── public/                # Static assets
-│   │   ├── logo-normal.png.png    # Main logo
-│   │   ├── logo-peeking.png.png   # Hover logo (fun easter egg)
-│   │   └── index.html         # HTML template
+│   └── .env                   # Environment variables (included for demo)
+│
+├── frontend/                   # React frontend
+│   ├── public/                # Static files
 │   ├── src/
-│   │   ├── components/        # All React components
-│   │   │   ├── Login.js       # Authentication page
-│   │   │   ├── Lesson.js      # Main learning interface
-│   │   │   ├── Profile.js     # Progress tracking page
-│   │   │   ├── Settings.js    # User preferences
-│   │   │   └── Admin.js       # Content management
-│   │   ├── App.js            # Main app with routing logic
-│   │   ├── App.css           # All styles including dark mode
-│   │   └── index.js          # React entry point
-│   ├── package.json          # Node.js dependencies
-│   └── .env.example          # Frontend environment variables
-├── docs/                      # Additional documentation
-│   ├── API.md                # Complete API documentation
-│   └── DEPLOYMENT.md         # Production deployment guide
-├── setup.sh                   # Unix/Linux setup script
+│   │   ├── components/        # React components
+│   │   │   ├── Login.js      # Authentication
+│   │   │   ├── Lesson.js     # Learning interface
+│   │   │   ├── Admin.js      # Admin panel
+│   │   │   ├── AIGenerator.js # AI content creation
+│   │   │   ├── Profile.js    # User profile
+│   │   │   ├── Metrics.js    # Analytics
+│   │   │   ├── Results.js    # Performance history
+│   │   │   ├── Badges.js     # Achievements
+│   │   │   └── Settings.js   # User preferences
+│   │   ├── App.js            # Main application
+│   │   ├── App.css           # Global styles
+│   │   └── index.js          # Entry point
+│   ├── package.json          # Node dependencies
+│   └── .env                  # Frontend config
+│
+├── docs/                      # Documentation
+│   └── RECOMMENDER_WORKFLOW.md # System architecture
+│
 ├── setup.bat                  # Windows setup script
-├── package.json              # Root project configuration
+├── setup.sh                   # Linux/Mac setup script
+├── test_system.bat           # System test script
 ├── .gitignore                # Git ignore rules
 ├── LICENSE                   # MIT License
-├── CONTRIBUTING.md           # Contribution guidelines
-└── README.md                 # This comprehensive guide
+└── README.md                 # This file
 ```
-
-## 🧠 How the Intelligence Works
-
-### Adaptive Learning Algorithm
-The "intelligent" part happens in the `get-question` API endpoint:
-
-1. **Check Student Mastery**: Look at current skill levels (0.0 to 1.0)
-2. **Find Weak Areas**: Identify skills below 1.0 (not mastered)
-3. **Prioritize Learning**: Pick a random unmastered skill to focus on
-4. **Select Question**: Choose a random question from that skill area
-5. **Update Progress**: When answered, adjust mastery (+0.25 correct, -0.1 wrong)
-
-This ensures students spend time on skills they haven't mastered yet, rather than random questions.
-
-### Data Flow Example
-
-Student answers "cold" to "What's opposite of hot?" 
-→ Frontend sends: {student_id: "student_alex", skill: "vocab_g2", is_correct: true}
-→ Backend updates: vocab_g2 mastery from 0.25 to 0.50
-→ Next question prioritizes skills still below 1.0
-
-
-## 🚀 Getting Started (For New Developers)
-
-### Prerequisites
-You need these installed:
-- **Python 3.12+** (for backend)
-- **Node.js 16+** (for frontend)
-
-### **Quick Setup & Startup (Recommended)**
-
-#### For Windows
-```bash
-setup.bat
-```
-
-#### For Linux/Mac
-```bash
-./setup.sh
-```
-
-### **Manual Setup**
-#### 1. Backend setup
-```bash
-cd backend
-pip install -r requirements.txt
-python app.py
-```
-
-#### 2. Frontend setup (new terminal)
-```bash
-cd frontend
-npm install
-npm start
-```
-
-**Backend runs on:** http://localhost:5000  
-**Frontend runs on:** http://localhost:3000
-
-#### 3. Test the System
-1. Open http://localhost:3000
-2. Try these login credentials:
-   - **Student**: `student/student`
-   - **Admin**: `admin/admin`
-
-## 🔐 Authentication System
-
-### How Login Works
-We implemented a **simple but effective** authentication system:
-
-```javascript
-// In Login.js
-if (username === 'admin' && password === 'admin') {
-  onLogin('admin');  // Sets userRole to 'admin'
-} else if (username === 'student' && password === 'student') {
-  onLogin('student'); // Sets userRole to 'student'
-}
-```
-
-### Role-Based Navigation
-The app automatically routes users based on their role:
-- **Admin login** → `/admin` (Content Management)
-- **Student login** → `/lesson` (Learning Interface)
-
-### Navigation Features I Added
-- **Smart History Management**: Logout clears browser history to prevent "stuck" pages
-- **Role Indicators**: Admin sees "Admin Mode" badge when viewing student areas
-- **Cross-Navigation**: Admin can easily switch between admin and student views
-- **Logout Confirmation**: Prevents accidental logouts
-
-## 🎨 Frontend Architecture
-
-### Component Structure
-Each page is a **React functional component** with hooks:
-
-```javascript
-// Example component structure
-const Lesson = ({ onLogout, userRole }) => {
-  const [currentQuestion, setCurrentQuestion] = useState({});
-  const [userAnswer, setUserAnswer] = useState('');
-  
-  // API calls with axios
-  const getNextQuestion = async () => {
-    const response = await axios.post('http://localhost:5000/api/get-question', {
-      student_id: 'student_alex'
-    });
-    setCurrentQuestion(response.data);
-  };
-  
-  return (/* JSX here */);
-};
-```
-
-### State Management
-We use **React hooks** for state management:
-- `useState` for component state
-- `useEffect` for side effects (API calls, animations)
-- Props for passing data between components
-
-### Styling Approach
-**Single CSS file** (`App.css`) with:
-- **CSS Variables** for dark mode theming
-- **Responsive design** with media queries
-- **Smooth animations** using CSS transitions
-- **Component-specific classes** for organization
-
-## 🔧 Backend Architecture
-
-### API Design Philosophy
-We built a **RESTful API** that's completely separate from the frontend:
-
-```python
-# Example endpoint structure
-@app.route('/api/get-question', methods=['POST'])
-def get_question():
-    # 1. Get student data
-    student_data = read_json_file(STUDENT_FILE)
-    
-    # 2. Apply learning algorithm
-    unmastered_skills = [skill for skill, score in mastery.items() if score < 1.0]
-    
-    # 3. Return appropriate question
-    return jsonify(selected_question)
-```
-
-### Data Storage Strategy
-We chose **JSON files** over a database because:
-- **Simplicity**: Easy to read and modify
-- **Portability**: No database setup required
-- **Transparency**: You can see exactly what data looks like
-- **Perfect for Demo**: Handles multiple users for demonstration
-
-### CORS Configuration
-```python
-from flask_cors import CORS
-app = Flask(__name__)
-CORS(app)  # Allows React (localhost:3000) to call API (localhost:5000)
-```
-
-## 🎯 Key Features Explained
-
-### 1. Adaptive Learning Engine
-**Location**: `backend/app.py` - `get_question()` function
-
-**How it works**:
-```python
-# Find skills that need work
-unmastered_skills = [skill for skill, score in mastery.items() if score < 1.0]
-
-# Pick one to focus on
-skill_to_teach = random.choice(unmastered_skills)
-
-# Find questions for that skill
-skill_questions = [q for q in all_questions if q['skill'] == skill_to_teach]
-```
-
-**Why this matters**: Students don't waste time on skills they've already mastered.
-
-### 2. Real-Time Progress Tracking
-**Location**: `frontend/src/components/Profile.js`
-
-**Visual feedback**:
-- Animated progress bars that fill based on mastery level
-- Color-coded stats (Total Skills, Mastered, Average Progress)
-- Smooth animations when progress updates
-
-### 3. Dark Mode Implementation
-**Location**: `frontend/src/App.css` + `Settings.js`
-
-**How it works**:
-```css
-/* CSS Variables for theming */
-body.dark-mode {
-  --bg-color: #121212;
-  --text-color: #e0e0e0;
-  /* ... more variables */
-}
-
-/* Components use variables */
-.app-container {
-  background-color: var(--bg-color, #ffffff);
-  color: var(--text-color, #333);
-}
-```
-
-**Persistence**: Saves preference to `localStorage` so it remembers your choice.
-
-### 4. Interactive Logo Easter Egg
-**Location**: `frontend/src/components/Login.js`
-
-**Features**:
-- **Hover Effect**: Logo changes from normal to "peeking" version
-- **Smooth Animations**: CSS transitions for professional feel
-
-### 5. Admin Content Management
-**Location**: `frontend/src/components/Admin.js` + backend API
-
-**Workflow**:
-1. Admin adds question through form
-2. Frontend sends to `/api/add-question`
-3. Backend validates and adds to `domain.json`
-4. New question immediately available for students
-
-## 🛠️ How to Modify and Extend
-
-### Adding New Skills
-1. **Add questions to backend**:
-```python
-# In backend/data/domain.json
-{
-  "id": 17,
-  "skill": "math_g3",  # New skill category
-  "question": "What is 12 + 8?",
-  "answer": "20"
-}
-```
-
-2. **Update student mastery tracking**:
-```python
-# In backend/data/student.json
-"mastery": {
-  "vocab_g2": 0.25,
-  "grammar_g2": 0.1,
-  "math_g3": 0.0  # Add new skill
-}
-```
-
-### Adding New API Endpoints
-```python
-# In backend/app.py
-@app.route('/api/your-new-endpoint', methods=['POST'])
-def your_new_function():
-    # Your logic here
-    return jsonify({"success": True, "data": result})
-```
-
-### Adding New React Components
-```javascript
-// Create new file: frontend/src/components/YourComponent.js
-import React, { useState } from 'react';
-
-const YourComponent = ({ props }) => {
-  const [state, setState] = useState('');
-  
-  return (
-    <div className="your-component">
-      {/* Your JSX */}
-    </div>
-  );
-};
-
-export default YourComponent;
-```
-
-### Modifying Styles
-All styles are in `frontend/src/App.css`:
-- **Dark mode**: Modify CSS variables in `body.dark-mode`
-- **Responsive**: Update media queries at bottom
-- **Animations**: Add new `@keyframes` rules
-- **Components**: Add new classes following existing naming pattern
-
-## 🐛 Common Issues and Solutions
-
-### Backend Won't Start
-```bash
-# Check Python version
-python --version  # Should be 3.12+
-
-# Install dependencies
-pip install flask flask-cors
-
-# Check if port 5000 is free
-# On Windows: netstat -an | findstr :5000
-```
-
-### Frontend Won't Start
-```bash
-# Check Node version
-node --version  # Should be 16+
-
-# Clear npm cache
-npm cache clean --force
-
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### CORS Errors
-Make sure:
-1. Backend has `CORS(app)` enabled
-2. Frontend API calls use correct URL: `http://localhost:5000`
-3. Both servers are running simultaneously
-
-### Navigation Issues
-The app uses React Router. If you get stuck:
-1. Check browser console for errors
-2. Logout and login again (clears history)
-3. Manually navigate to `http://localhost:3000`
-
-## 📊 Data Structure Reference
-
-### Student Data Format
-```json
-{
-  "student_alex": {
-    "name": "Alex Smith",
-    "email": "student@test.com",
-    "language_prefs": {
-      "learn": "english",
-      "ui": "english"
-    },
-    "mastery": {
-      "vocab_g2": 0.75,    # 75% mastered
-      "grammar_g2": 0.25   # 25% mastered
-    }
-  }
-}
-```
-
-### Question Data Format
-```json
-{
-  "questions": [
-    {
-      "id": 1,
-      "skill": "vocab_g2",
-      "question": "What is the opposite of 'hot'?",
-      "answer": "cold"
-    }
-  ]
-}
-```
-
-## 🚀 Deployment Considerations
-
-### For Production Use
-1. **Database**: Replace JSON files with PostgreSQL or MongoDB
-2. **Authentication**: Implement JWT tokens and password hashing
-3. **Environment Variables**: Use `.env` files for configuration
-4. **Error Handling**: Add comprehensive error logging
-5. **Testing**: Add unit tests for components and API endpoints
-
-### Hosting Options
-- **Frontend**: Netlify, Vercel, or GitHub Pages
-- **Backend**: Heroku, Railway, or DigitalOcean
-- **Database**: PostgreSQL on Heroku or MongoDB Atlas
-
-## 🚀 Key Demo Walkthroughs
-
-This project is designed to be demonstrated by showing 3 key user stories that cover all core functionality and address the project's primary goals.
-
-### Walkthrough 1: The "Intelligent" Student Lesson (Adaptive Logic)
-
-This walkthrough demonstrates the "intelligent" part of the ITS in action.
-
-1. **Log In:** Log in as a student (e.g., `student/student`).
-2. **Receive Question:** The `Lesson.js` component loads and calls the `/api/get-question` endpoint.
-3. **Backend Logic:** The Flask backend checks the `student.json` file, identifies an unmastered skill (e.g., `vocab_g2`), and sends a question for that skill.
-4. **Answer Incorrectly:** Answer the question *incorrectly*.
-5. **See Feedback:** The frontend shows an "Incorrect" message. The backend updates the student's mastery score (e.g., `0.25` -> `0.15`).
-6. **Receive New Question:** The frontend automatically requests a new question. The backend *again* sees that `vocab_g2` is unmastered and **prioritizes it**, sending a *different* question from that same skill.
-7. **Answer Correctly:** Answer the new question *correctly*.
-8. **See Feedback:** The frontend shows a "Correct!" message. The backend updates the mastery score (e.g., `0.15` -> `0.40`)
-
-**What this proves:** The system is "intelligent" and meets the core requirement of prioritizing problems from concepts the student has not yet mastered.
-
-### Walkthrough 2: The "Admin" Content Creation (System Growth)
-
-This walkthrough demonstrates the solution to the "content creation" gap identified in the project feedback.
-
-1. **Log In:** Log in as an admin (e.g., `admin/admin`).
-2. **Navigate:** You are automatically taken to the `/admin` page.
-3. **Create Question:** Fill out the "Content Management" form:
-   - **Skill:** `vocab_g2` (Grade 2 Vocabulary)
-   - **Question:** `What is the opposite of 'fast'?`
-   - **Answer:** `slow`
-4. **Save:** Click "Add Question".
-5. **Backend Logic:** The `Admin.js` frontend sends the data to the `/api/add-question` endpoint. The Flask backend validates it and adds this new question object to the `domain.json` file.
-
-**What this proves:** The system is not a static shell. It is a dynamic tool that an admin or instructor can actively grow and add new content to, which is essential for a real ITS.
-
-### Walkthrough 3: The "Student" Progress Review (Visual Feedback)
-
-This walkthrough demonstrates the "Student Model" and provides clear visual feedback to the user.
-
-1. **Log In:** Log in as the *same student* from Walkthrough 1.
-2. **Navigate:** Click on the "My Progress" link in the header.
-3. **View Profile:** The `Profile.js` component loads and calls the `/api/get-progress` endpoint.
-4. **See Mastery:** The page displays the student's "Skill Mastery," showing visual progress bars. The `vocab_g2` bar will show **40%** (or `0.40`), reflecting the progress made in the first walkthrough.
-
-**What this proves:** The system correctly models, saves, and displays student progress over time. The "Student Model" (`student.json`) is persistent and directly connects the lesson experience to the progress review.
-
-## 🎓 Learning Outcomes
-
-This project demonstrates:
-- **Full-Stack Development**: Separate frontend and backend
-- **Modern React Patterns**: Hooks, routing, state management
-- **RESTful API Design**: Clean, predictable endpoints
-- **User Experience**: Responsive design, animations, accessibility
-- **Software Architecture**: Component-based, maintainable code
-
-## 📞 Support and Contact
-
-If you're working with this code and need help: 
-
-1. **Check the console**: Browser dev tools often show the issue
-2. **Read error messages**: They usually tell you exactly what's wrong
-3. **Test API endpoints**: Use Postman or browser to test backend directly
-4. **Check network tab**: See if API calls are reaching the backend
-
-If you need further help, create an issue on the GitHub repo and provide as much information as possible.
 
 ---
 
-**Built with ❤️ for CIS\*3750 - KINGS CODE**
+## 🔑 Environment Variables
+
+### Backend (.env)
+
+The `.env` file is **included in this repository** for university project demonstration purposes. In production, keep this file private!
+
+```bash
+# Flask Configuration
+FLASK_ENV=development
+FLASK_DEBUG=True
+FLASK_PORT=5000
+
+# Google Gemini AI (Required for AI features)
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Unsplash Images (Optional)
+UNSPLASH_ACCESS_KEY=your_unsplash_key_here
+```
+
+### Get API Keys (Free)
+
+**Google Gemini AI:**
+1. Visit: https://makersuite.google.com/app/apikey
+2. Sign in with Google account
+3. Click "Create API Key"
+4. Copy and paste into `.env`
+
+**Unsplash (Optional):**
+1. Visit: https://unsplash.com/developers
+2. Register as developer
+3. Create new application
+4. Copy "Access Key"
+5. Paste into `.env`
+
+> **Note**: The system works without API keys, but AI features will be disabled.
+
+---
+
+## 🧪 Testing
+
+### Quick System Test
+
+```bash
+# Windows
+test_system.bat
+
+# Linux/Mac
+chmod +x test_system.sh
+./test_system.sh
+```
+
+### Manual Testing
+
+1. **Backend Health Check**
+```bash
+curl http://localhost:5000/api/skills
+```
+
+2. **AI Status Check**
+```bash
+curl http://localhost:5000/api/ai/status
+```
+
+3. **Test AI Generation**
+```bash
+cd backend
+python test_ai.py
+```
+
+---
+
+## 🎓 Educational Value
+
+This project demonstrates:
+
+1. **Full-Stack Development**: React frontend + Flask backend
+2. **AI Integration**: Real-world use of large language models
+3. **Adaptive Systems**: Dynamic content based on user behavior
+4. **Data Management**: JSON-based database with CRUD operations
+5. **API Design**: RESTful endpoints and proper error handling
+6. **User Experience**: Responsive design and intuitive interface
+7. **Software Engineering**: Clean code, modular architecture, documentation
+
+---
+
+## 🤝 Contributing
+
+This is a university project, but contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- **Google Gemini AI** - For powerful content generation capabilities
+- **Unsplash** - For free educational images
+- **React Team** - For the amazing frontend framework
+- **Flask Team** - For the lightweight backend framework
+
+---
+
+## 📞 Support
+
+For questions or issues:
+1. Check the [documentation](docs/)
+2. Review existing issues on GitHub
+3. Open a new issue with detailed description
+
+---
+
+## 🎯 Future Enhancements
+
+- [ ] Multi-language support
+- [ ] Voice-based interactions
+- [ ] Mobile application
+- [ ] Real-time collaboration
+- [ ] Advanced analytics dashboard
+- [ ] Integration with LMS platforms
+- [ ] Video content support
+- [ ] Peer-to-peer learning features
+
+---
+
+**Built with ❤️ for education | University Project 2025**
+
+**Version**: 1.0.0  
+**Status**: ✅ Production Ready

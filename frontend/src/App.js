@@ -5,6 +5,7 @@ import Lesson from './components/Lesson';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
 import Admin from './components/Admin';
+import AIGenerator from './components/AIGenerator';
 import Badges from './components/Badges';
 import Metrics from './components/Metrics';
 import Results from './components/Results';
@@ -109,6 +110,14 @@ function AppContent() {
           element={
             userRole === 'admin'
               ? <Admin onLogout={handleLogout} userRole={userRole} />
+              : <Navigate to="/lesson" replace />
+          }
+        />
+        <Route
+          path="/ai-generator"
+          element={
+            userRole === 'admin'
+              ? <AIGenerator onLogout={handleLogout} userRole={userRole} studentId={studentId} />
               : <Navigate to="/lesson" replace />
           }
         />

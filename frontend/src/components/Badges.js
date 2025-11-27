@@ -4,19 +4,21 @@ import axios from 'axios';
 
 const API_BASE = 'http://localhost:5000';
 
-const Badges = ({ onLogout, userRole }) => {
+const Badges = ({ onLogout, userRole, studentId }) => {
   const [earnedBadges, setEarnedBadges] = useState([]);
   const [availableBadges, setAvailableBadges] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const activeStudentId = studentId || 'student_alex';
+
   useEffect(() => {
     fetchBadges();
-  }, []);
+  }, [studentId]);
 
   const fetchBadges = async () => {
     try {
       const response = await axios.post(`${API_BASE}/api/get-badges`, {
-        student_id: 'student_alex'
+        student_id: activeStudentId
       });
       setEarnedBadges(response.data.earned_badges);
       setAvailableBadges(response.data.available_badges);

@@ -22,6 +22,23 @@ const Admin = ({ onLogout, userRole }) => {
   const [newLesson, setNewLesson] = useState({ skill: 'vocabulary', title: '', description: '' });
   const [users, setUsers] = useState([]);
   const [isUsersLoading, setIsUsersLoading] = useState(false);
+  
+  // Image management state
+  const [imageSearch, setImageSearch] = useState('');
+  const [selectedLesson, setSelectedLesson] = useState('');
+  const [selectedQuestion, setSelectedQuestion] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [imagePosition, setImagePosition] = useState('header');
+  
+  // Badge creation state
+  const [badgeForm, setBadgeForm] = useState({
+    badge_id: '',
+    name: '',
+    description: '',
+    icon: '🏆',
+    criteria_type: 'accuracy',
+    criteria_value: 80
+  });
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -217,6 +234,88 @@ const Admin = ({ onLogout, userRole }) => {
     }
   };
 
+  const handleAddImageToLesson = async (e) => {
+    e.preventDefault();
+    
+    if (!selectedLesson || !imageUrl) {
+      showFeedback('Please select a lesson and provide an image URL', true);
+      return;
+    }
+
+    try {
+      const [skill, lessonId] = selectedLesson.split('|');
+      await axios.post(`${API_BASE}/api/admin/update-lesson-image`, {
+        skill,
+        lesson_id: lessonId,
+        image_url: imageUrl,
+        position: imagePosition
+      });
+      showFeedback('Image added to lesson successfully!');
+      setImageUrl('');
+    } catch (error) {
+      showFeedback(error.response?.data?.error || 'Error adding image', true);
+    }
+  };
+
+  const handleAddImageToQuestion = async (e) => {
+    e.preventDefault();
+    
+    if (!selectedQuestion || !imageUrl) {
+      showFeedback('Please select a question and provide an image URL', true);
+      return;
+    }
+
+    try {
+      await axios.post(`${API_BASE}/api/admin/update-question-image`, {
+        question_id: parseInt(selectedQuestion),
+        image_url: imageUrl
+      });
+      showFeedback('Image added to question successfully!');
+      setImageUrl('');
+      if (activeTab === 'manage') {
+        fetchAllQuestions();
+      }
+    } catch (error) {
+      showFeedback(error.response?.data?.error || 'Error adding image', true);
+    }
+  };
+
+  const handleCreateBadge = async (e) => {
+    e.preventDefault();
+    
+    if (!badgeForm.badge_id || !badgeForm.name || !badgeForm.description) {
+      showFeedback('Please fill in all badge fields', true);
+      return;
+    }
+
+    try {
+      const criteria = {
+        type: badgeForm.criteria_type,
+        value: badgeForm.criteria_value
+      };
+
+      await axios.post(`${API_BASE}/api/admin/create-badge`, {
+        badge_id: badgeForm.badge_id,
+        name: badgeForm.name,
+        description: badgeForm.description,
+        icon: badgeForm.icon,
+        criteria
+      });
+      
+      showFeedback('Badge created successfully!');
+      setBadgeForm({
+        badge_id: '',
+        name: '',
+        description: '',
+        icon: '🏆',
+        criteria_type: 'accuracy',
+        criteria_value: 80
+      });
+    } catch (error) {
+      showFeedback(error.response?.data?.error || 'Error creating badge', true);
+    }
+  };
+
   if (!isAdmin) {
     return (
       <div className="app-container">
@@ -238,6 +337,7 @@ const Admin = ({ onLogout, userRole }) => {
           <h1>Admin Panel</h1>
         </Link>
         <div className="header-right">
+          <Link to="/ai-generator" className="header-link">🤖 AI Generator</Link>
           <Link to="/lesson" className="header-link">👀 View Student Area</Link>
           <button
             onClick={() => {
@@ -281,6 +381,18 @@ const Admin = ({ onLogout, userRole }) => {
             onClick={() => setActiveTab('skills')}
           >
             Skills
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'images' ? 'active' : ''}`}
+            onClick={() => setActiveTab('images')}
+          >
+            🖼️ Images
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'badges' ? 'active' : ''}`}
+            onClick={() => setActiveTab('badges')}
+          >
+            🏆 Badges
           </button>
         </div>
 
@@ -511,6 +623,220 @@ const Admin = ({ onLogout, userRole }) => {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'images' && (
+          <div className="tab-content">
+            <h2>🖼️ Image Management</h2>
+            <p>Add images to lessons and questions to make them more engaging.</p>
+
+            <div className="admin-form">
+              <h3>Add Image to Lesson</h3>
+              <form onSubmit={handleAddImageToLesson}>
+                <div className="input-group">
+                  <label htmlFor="lessonSelect">Select Lesson</label>
+                  <select
+                    id="lessonSelect"
+                    value={selectedLesson}
+                    onChange={(e) => setSelectedLesson(e.target.value)}
+                  >
+                    <option value="">-- Select a lesson --</option>
+                    {skillLessons.map(({ skill, lessons }) =>
+                      lessons.map((lesson) => (
+                        <option key={lesson.id} value={`${skill}|${lesson.id}`}>
+                          {skill.replace(/_/g, ' ')} - {lesson.title}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                </div>
+
+                <div className="input-group">
+                  <label htmlFor="imageUrl">Image URL</label>
+                  <input
+                    type="url"
+                    id="imageUrl"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="https://images.unsplash.com/..."
+                  />
+                  <small>Tip: Get free images from <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a></small>
+                </div>
+
+                <div className="input-group">
+                  <label htmlFor="imagePosition">Image Position</label>
+                  <select
+                    id="imagePosition"
+                    value={imagePosition}
+                    onChange={(e) => setImagePosition(e.target.value)}
+                  >
+                    <option value="header">Header (top of lesson)</option>
+                    <option value="inline">Inline (middle of content)</option>
+                    <option value="footer">Footer (bottom of lesson)</option>
+                  </select>
+                </div>
+
+                <button type="submit" className="btn btn-primary">
+                  Add Image to Lesson
+                </button>
+              </form>
+            </div>
+
+            <div className="admin-form" style={{ marginTop: '30px' }}>
+              <h3>Add Image to Question</h3>
+              <form onSubmit={handleAddImageToQuestion}>
+                <div className="input-group">
+                  <label htmlFor="questionSelect">Select Question</label>
+                  <select
+                    id="questionSelect"
+                    value={selectedQuestion}
+                    onChange={(e) => setSelectedQuestion(e.target.value)}
+                  >
+                    <option value="">-- Select a question --</option>
+                    {allQuestions.map((q) => (
+                      <option key={q.id} value={q.id}>
+                        ID {q.id}: {q.question.substring(0, 50)}...
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="input-group">
+                  <label htmlFor="questionImageUrl">Image URL</label>
+                  <input
+                    type="url"
+                    id="questionImageUrl"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="https://images.unsplash.com/..."
+                  />
+                </div>
+
+                <button type="submit" className="btn btn-primary">
+                  Add Image to Question
+                </button>
+              </form>
+            </div>
+
+            <div className="admin-info" style={{ marginTop: '30px' }}>
+              <h3>💡 Image Tips</h3>
+              <ul>
+                <li>Use high-quality, relevant images</li>
+                <li>Free sources: <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a>, <a href="https://pexels.com" target="_blank" rel="noopener noreferrer">Pexels</a>, <a href="https://pixabay.com" target="_blank" rel="noopener noreferrer">Pixabay</a></li>
+                <li>Images make lessons more engaging for students</li>
+                <li>For vocabulary: use images of the word being taught</li>
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'badges' && (
+          <div className="tab-content">
+            <h2>🏆 Create Custom Badge</h2>
+            <p>Create special achievements for students to earn.</p>
+
+            <div className="admin-form">
+              <form onSubmit={handleCreateBadge}>
+                <div className="input-group">
+                  <label htmlFor="badgeId">Badge ID</label>
+                  <input
+                    type="text"
+                    id="badgeId"
+                    value={badgeForm.badge_id}
+                    onChange={(e) => setBadgeForm({ ...badgeForm, badge_id: e.target.value })}
+                    placeholder="speed_master"
+                  />
+                  <small>Use lowercase with underscores (e.g., speed_master, perfect_week)</small>
+                </div>
+
+                <div className="input-group">
+                  <label htmlFor="badgeName">Badge Name</label>
+                  <input
+                    type="text"
+                    id="badgeName"
+                    value={badgeForm.name}
+                    onChange={(e) => setBadgeForm({ ...badgeForm, name: e.target.value })}
+                    placeholder="Speed Master"
+                  />
+                </div>
+
+                <div className="input-group">
+                  <label htmlFor="badgeDescription">Description</label>
+                  <textarea
+                    id="badgeDescription"
+                    value={badgeForm.description}
+                    onChange={(e) => setBadgeForm({ ...badgeForm, description: e.target.value })}
+                    placeholder="Answer 10 questions in under 5 seconds each!"
+                    rows="2"
+                  />
+                </div>
+
+                <div className="input-group">
+                  <label htmlFor="badgeIcon">Icon (Emoji)</label>
+                  <input
+                    type="text"
+                    id="badgeIcon"
+                    value={badgeForm.icon}
+                    onChange={(e) => setBadgeForm({ ...badgeForm, icon: e.target.value })}
+                    placeholder="⚡"
+                    maxLength="2"
+                  />
+                  <small>Common: 🏆 ⚡ 🌟 🎯 🔥 💯 👑 🎓 📚 ✨</small>
+                </div>
+
+                <div className="input-group">
+                  <label htmlFor="criteriaType">Badge Criteria Type</label>
+                  <select
+                    id="criteriaType"
+                    value={badgeForm.criteria_type}
+                    onChange={(e) => setBadgeForm({ ...badgeForm, criteria_type: e.target.value })}
+                  >
+                    <option value="accuracy">Accuracy-based (% correct)</option>
+                    <option value="speed">Speed-based (seconds per question)</option>
+                    <option value="streak">Streak-based (consecutive correct)</option>
+                    <option value="total">Total-based (total questions)</option>
+                    <option value="skill_mastery">Skill Mastery (100% in a skill)</option>
+                    <option value="custom">Custom (manual award)</option>
+                  </select>
+                </div>
+
+                <div className="input-group">
+                  <label htmlFor="criteriaValue">Criteria Value</label>
+                  <input
+                    type="number"
+                    id="criteriaValue"
+                    value={badgeForm.criteria_value}
+                    onChange={(e) => setBadgeForm({ ...badgeForm, criteria_value: parseInt(e.target.value) })}
+                    placeholder="80"
+                  />
+                  <small>
+                    {badgeForm.criteria_type === 'accuracy' && 'Percentage (e.g., 80 for 80% accuracy)'}
+                    {badgeForm.criteria_type === 'speed' && 'Seconds (e.g., 5 for under 5 seconds)'}
+                    {badgeForm.criteria_type === 'streak' && 'Number of consecutive correct answers'}
+                    {badgeForm.criteria_type === 'total' && 'Total number of questions'}
+                    {badgeForm.criteria_type === 'skill_mastery' && 'Not used (automatic at 100%)'}
+                    {badgeForm.criteria_type === 'custom' && 'Not used (manual award)'}
+                  </small>
+                </div>
+
+                <button type="submit" className="btn btn-primary">
+                  Create Badge
+                </button>
+              </form>
+            </div>
+
+            <div className="admin-info" style={{ marginTop: '30px' }}>
+              <h3>💡 Badge Ideas</h3>
+              <ul>
+                <li><strong>Speed Demon ⚡:</strong> Answer 10 questions in under 5 seconds each</li>
+                <li><strong>Perfect Week 🌟:</strong> Practice every day for 7 days</li>
+                <li><strong>Accuracy Master 🎯:</strong> Maintain 90% accuracy over 20 questions</li>
+                <li><strong>Streak King 🔥:</strong> Get 15 correct answers in a row</li>
+                <li><strong>Century Club 💯:</strong> Answer 100 total questions</li>
+                <li><strong>Scholar 🎓:</strong> Master all 5 skills</li>
+              </ul>
             </div>
           </div>
         )}

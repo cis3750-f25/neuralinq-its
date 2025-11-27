@@ -4,21 +4,23 @@ import axios from 'axios';
 
 const API_BASE = 'http://localhost:5000';
 
-const Metrics = ({ onLogout, userRole }) => {
+const Metrics = ({ onLogout, userRole, studentId }) => {
   const [metrics, setMetrics] = useState({});
   const [mastery, setMastery] = useState({});
   const [recommendedSkills, setRecommendedSkills] = useState([]);
   const [level, setLevel] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
+  const activeStudentId = studentId || 'student_alex';
+
   useEffect(() => {
     fetchMetrics();
-  }, []);
+  }, [studentId]);
 
   const fetchMetrics = async () => {
     try {
       const response = await axios.post(`${API_BASE}/api/get-metrics`, {
-        student_id: 'student_alex'
+        student_id: activeStudentId
       });
       setMetrics(response.data.metrics);
       setMastery(response.data.mastery);

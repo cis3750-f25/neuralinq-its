@@ -180,5 +180,257 @@
             "start_time": 1764195896.0823216,
             "lesson": "writing_lesson_1"
         }
+    },
+    "admin": {
+        "username": "admin",
+        "password_hash": "scrypt:32768:8:1$EKVmH7OOTuq0nRPD$54155ef9803edc1e8f7e94a97a7d09f4ca12d60cb0c59e8f607224dd79788841f65d1679eedc85526a1e369549fe891b582f6f3506113eb8d789169a88a5f79d",
+        "role": "student",
+        "name": "Admin",
+        "email": "admin@example.com",
+        "level": 1,
+        "language_prefs": {
+            "learn": "english",
+            "ui": "english"
+        },
+        "mastery": {
+            "grammar": 1.0,
+            "reading_comprehension": 0.3,
+            "spelling": 0.3,
+            "vocabulary": 0.3,
+            "writing": 0.3
+        },
+        "metrics": {
+            "total_questions_answered": 9,
+            "correct_answers": 4,
+            "incorrect_answers": 5,
+            "average_time_per_question": 8.92019240061442,
+            "skill_performance": {
+                "grammar": {
+                    "questions_answered": 5,
+                    "correct": 4,
+                    "incorrect": 1,
+                    "average_time": 12.056346321105957,
+                    "struggling_areas": []
+                },
+                "reading_comprehension": {
+                    "questions_answered": 1,
+                    "correct": 0,
+                    "incorrect": 1,
+                    "average_time": 5.0,
+                    "struggling_areas": []
+                },
+                "spelling": {
+                    "questions_answered": 1,
+                    "correct": 0,
+                    "incorrect": 1,
+                    "average_time": 5.0,
+                    "struggling_areas": []
+                },
+                "vocabulary": {
+                    "questions_answered": 1,
+                    "correct": 0,
+                    "incorrect": 1,
+                    "average_time": 5.0,
+                    "struggling_areas": []
+                },
+                "writing": {
+                    "questions_answered": 1,
+                    "correct": 0,
+                    "incorrect": 1,
+                    "average_time": 5.0,
+                    "struggling_areas": []
+                }
+            }
+        },
+        "badges": [
+            {
+                "id": "first_lesson",
+                "name": "First Steps",
+                "description": "Completed your first lesson!",
+                "icon": "🌟",
+                "earned_date": "2025-11-27"
+            },
+            {
+                "id": "speed_demon",
+                "name": "Speed Demon",
+                "description": "Average answer time under 15 seconds!",
+                "icon": "⚡",
+                "earned_date": "2025-11-27"
+            },
+            {
+                "id": "grammar_master",
+                "name": "Grammar Master",
+                "description": "Mastered all Grammar skills!",
+                "icon": "🏆",
+                "earned_date": "2025-11-27"
+            }
+        ],
+        "question_history": [
+            {
+                "question_id": 6,
+                "skill": "grammar",
+                "lesson": "grammar_lesson_1",
+                "is_correct": false,
+                "time_spent": 5,
+                "hints_used": 0,
+                "timestamp": "2025-11-27 04:29:03",
+                "session_id": 1
+            },
+            {
+                "question_id": 11,
+                "skill": "reading_comprehension",
+                "lesson": "reading_comprehension_lesson_1",
+                "is_correct": false,
+                "time_spent": 5,
+                "hints_used": 0,
+                "timestamp": "2025-11-27 04:29:03",
+                "session_id": 2
+            },
+            {
+                "question_id": 14,
+                "skill": "spelling",
+                "lesson": "spelling_lesson_1",
+                "is_correct": false,
+                "time_spent": 5,
+                "hints_used": 0,
+                "timestamp": "2025-11-27 04:29:03",
+                "session_id": 3
+            },
+            {
+                "question_id": 1,
+                "skill": "vocabulary",
+                "lesson": "vocabulary_lesson_1",
+                "is_correct": false,
+                "time_spent": 5,
+                "hints_used": 0,
+                "timestamp": "2025-11-27 04:29:03",
+                "session_id": 4
+            },
+            {
+                "question_id": 17,
+                "skill": "writing",
+                "lesson": "writing_lesson_1",
+                "is_correct": false,
+                "time_spent": 5,
+                "hints_used": 0,
+                "timestamp": "2025-11-27 04:29:03",
+                "session_id": 5
+            },
+            {
+                "question_id": 6,
+                "skill": "grammar",
+                "lesson": "grammar_lesson_1",
+                "is_correct": true,
+                "time_spent": 21.0,
+                "hints_used": 1,
+                "timestamp": "2025-11-27 04:43:42",
+                "session_id": 6
+            },
+            {
+                "question_id": 8,
+                "skill": "grammar",
+                "lesson": "grammar_lesson_1",
+                "is_correct": true,
+                "time_spent": 20.5,
+                "hints_used": 1,
+                "timestamp": "2025-11-27 04:44:06",
+                "session_id": 7
+            },
+            {
+                "question_id": 9,
+                "skill": "grammar",
+                "lesson": "grammar_lesson_1",
+                "is_correct": true,
+                "time_spent": 9.4,
+                "hints_used": 0,
+                "timestamp": "2025-11-27 04:44:19",
+                "session_id": 8
+            },
+            {
+                "question_id": 7,
+                "skill": "grammar",
+                "lesson": "grammar_lesson_1",
+                "is_correct": true,
+                "time_spent": 4.4,
+                "hints_used": 0,
+                "timestamp": "2025-11-27 04:45:03",
+                "session_id": 9
+            }
+        ],
+        "current_session": {
+            "question_id": 10,
+            "hints_used": 0,
+            "start_time": 1764236706.6304395,
+            "lesson": "grammar_lesson_1"
+        },
+        "diagnostic_complete": true
+    },
+    "student": {
+        "username": "student",
+        "password_hash": "scrypt:32768:8:1$h3XRmromX7CR8BvQ$2c9b2b3eb887347b6777178450c923bbbf9f38297594bcb1d9621636adbb38268e3771daff6aff475dfd6639b38d075ff90d502c929c4bb2d131e89aabf09a50",
+        "role": "admin",
+        "name": "Student",
+        "email": "student@example.com",
+        "level": 1,
+        "language_prefs": {
+            "learn": "english",
+            "ui": "english"
+        },
+        "mastery": {
+            "grammar": 0.0,
+            "reading_comprehension": 0.0,
+            "spelling": 0.0,
+            "vocabulary": 0.0,
+            "writing": 0.0
+        },
+        "metrics": {
+            "total_questions_answered": 0,
+            "correct_answers": 0,
+            "incorrect_answers": 0,
+            "average_time_per_question": 0,
+            "skill_performance": {}
+        },
+        "badges": [],
+        "question_history": [],
+        "current_session": {
+            "question_id": null,
+            "hints_used": 0,
+            "start_time": null
+        },
+        "diagnostic_complete": false
+    },
+    "adminn": {
+        "username": "adminn",
+        "password_hash": "scrypt:32768:8:1$g2Ib14Y4qNfyyBU0$3feb6f79646ee5389e9b539131324867d566c2d6f3a456390a43759226d55f1c02ac41f080d05d10cba432d4345f6b2c72be152326f1fbef4eaab10cd1b301f4",
+        "role": "admin",
+        "name": "Adminn",
+        "email": "adminn@example.com",
+        "level": 1,
+        "language_prefs": {
+            "learn": "english",
+            "ui": "english"
+        },
+        "mastery": {
+            "grammar": 0.0,
+            "reading_comprehension": 0.0,
+            "spelling": 0.0,
+            "vocabulary": 0.0,
+            "writing": 0.0
+        },
+        "metrics": {
+            "total_questions_answered": 0,
+            "correct_answers": 0,
+            "incorrect_answers": 0,
+            "average_time_per_question": 0,
+            "skill_performance": {}
+        },
+        "badges": [],
+        "question_history": [],
+        "current_session": {
+            "question_id": null,
+            "hints_used": 0,
+            "start_time": null
+        },
+        "diagnostic_complete": false
     }
 }

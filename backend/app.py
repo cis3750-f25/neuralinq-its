@@ -8,6 +8,18 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import threading
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Import AI generator
+try:
+    from ai_generator import get_generator
+    AI_ENABLED = True
+except Exception as e:
+    print(f"AI Generator not available: {e}")
+    AI_ENABLED = False
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend
@@ -413,7 +425,16 @@ def get_question():
         skill_questions = [q for q in skill_questions if q.get('lesson') == requested_lesson]
 
     if not skill_questions:
-        return jsonify({"error": f"No questions found for skill: {skill_to_teach}", "lesson": requested_lesson}), 500
+        return jsonify({
+            "error": f"No questions found for skill: {skill_to_teach}",
+            "lesson": requested_lesson,
+            "skill": skill_to_teach,
+            "debug": {
+                "total_questions": len(all_questions),
+                "skill_questions_before_filter": len([q for q in all_questions if q['skill'] == skill_to_teach]),
+                "requested_lesson": requested_lesson
+            }
+        }), 404
 
     # ML-inspired selection: choose the question whose predicted success probability is nearest to 70%
     student_skill_score = student['mastery'].get(skill_to_teach, 0.0)
@@ -429,6 +450,9 @@ def get_question():
             'difficulty_score': difficulty_score,
             'distance_to_target': abs(predicted_probability - target_probability)
         })
+
+    if not scored_questions:
+        return jsonify({"error": "No questions available after scoring"}), 500
 
     # Choose the closest to the target probability; break ties randomly
     scored_questions.sort(key=lambda q: q['distance_to_target'])
@@ -824,6 +848,107 @@ def delete_user_account():
 
     return jsonify({"success": True, "message": f"User '{username}' deleted"})
 
+
+@app.route('/api/admin/create-badge', methods=['POST'])
+def create_custom_badge():
+    """Create a custom badge (admin functionality)."""
+    badge_id = request.json.get('badge_id')
+    name = request.json.get('name')
+    description = request.json.get('description')
+    icon = request.json.get('icon', '🏆')
+    criteria = request.json.get('criteria', {})
+
+    if not badge_id or not name or not description:
+        return jsonify({"error": "badge_id, name, and description are required"}), 400
+
+    domain_data = read_json_file(DOMAIN_FILE)
+    
+    # Initialize custom_badges if it doesn't exist
+    if 'custom_badges' not in domain_data:
+        domain_data['custom_badges'] = []
+    
+    # Check if badge already exists
+    if any(b['id'] == badge_id for b in domain_data['custom_badges']):
+        return jsonify({"error": "Badge with this ID already exists"}), 400
+    
+    new_badge = {
+        'id': badge_id,
+        'name': name,
+        'description': description,
+        'icon': icon,
+        'criteria': criteria,
+        'custom': True
+    }
+    
+    domain_data['custom_badges'].append(new_badge)
+    write_json_file(DOMAIN_FILE, domain_data)
+    
+    return jsonify({"success": True, "badge": new_badge})
+
+
+@app.route('/api/admin/update-lesson-image', methods=['POST'])
+def update_lesson_image():
+    """Add or update image in a lesson (admin functionality)."""
+    skill = request.json.get('skill')
+    lesson_id = request.json.get('lesson_id')
+    image_url = request.json.get('image_url')
+    image_position = request.json.get('position', 'header')  # header, inline, footer
+
+    if not skill or not lesson_id or not image_url:
+        return jsonify({"error": "skill, lesson_id, and image_url are required"}), 400
+
+    domain_data = read_json_file(DOMAIN_FILE)
+    lessons = domain_data.get('lessons', {})
+    
+    if skill not in lessons:
+        return jsonify({"error": f"Skill '{skill}' not found"}), 404
+    
+    lesson = next((l for l in lessons[skill] if l['id'] == lesson_id), None)
+    if not lesson:
+        return jsonify({"error": f"Lesson '{lesson_id}' not found"}), 404
+    
+    # Add image to lesson content based on position
+    image_markdown = f"\n\n![Lesson Image]({image_url})\n\n"
+    
+    if image_position == 'header':
+        lesson['content'] = image_markdown + lesson['content']
+    elif image_position == 'footer':
+        lesson['content'] = lesson['content'] + image_markdown
+    else:  # inline
+        # Add in the middle
+        lines = lesson['content'].split('\n')
+        mid = len(lines) // 2
+        lines.insert(mid, image_markdown)
+        lesson['content'] = '\n'.join(lines)
+    
+    write_json_file(DOMAIN_FILE, domain_data)
+    
+    return jsonify({"success": True, "lesson": lesson})
+
+
+@app.route('/api/admin/update-question-image', methods=['POST'])
+def update_question_image():
+    """Add image to a question (admin functionality)."""
+    question_id = request.json.get('question_id')
+    image_url = request.json.get('image_url')
+
+    if not question_id or not image_url:
+        return jsonify({"error": "question_id and image_url are required"}), 400
+
+    domain_data = read_json_file(DOMAIN_FILE)
+    questions = domain_data.get('questions', [])
+    
+    question = next((q for q in questions if q['id'] == question_id), None)
+    if not question:
+        return jsonify({"error": "Question not found"}), 404
+    
+    # Add image URL to question
+    question['image_url'] = image_url
+    
+    write_json_file(DOMAIN_FILE, domain_data)
+    
+    return jsonify({"success": True, "question": question})
+
 @app.route('/api/add-question', methods=['POST'])
 def add_question():
     """Add new question (Admin functionality)."""
@@ -1206,6 +1331,203 @@ def get_session_summary():
         },
         "questions": session_questions
     })
+
+
+# ============================================
+# AI-POWERED LESSON GENERATION ENDPOINTS
+# ============================================
+
+@app.route('/api/ai/status', methods=['GET'])
+def ai_status():
+    """Check if AI features are available."""
+    return jsonify({
+        "ai_enabled": AI_ENABLED,
+        "features": ["lesson_generation", "question_generation", "personalized_practice"] if AI_ENABLED else []
+    })
+
+
+@app.route('/api/ai/generate-lesson', methods=['POST'])
+def ai_generate_lesson():
+    """Generate a new lesson using AI."""
+    if not AI_ENABLED:
+        return jsonify({"error": "AI features not available. Check GEMINI_API_KEY."}), 503
+    
+    skill = request.json.get('skill')
+    difficulty = request.json.get('difficulty', 'beginner')
+    student_id = request.json.get('student_id')
+    
+    if not skill:
+        return jsonify({"error": "Skill is required"}), 400
+    
+    try:
+        generator = get_generator()
+        
+        # Get student weak areas if student_id provided
+        weak_areas = []
+        if student_id:
+            student_data = read_json_file(STUDENT_FILE)
+            if student_id in student_data:
+                metrics = student_data[student_id].get('metrics', {}).get('skill_performance', {})
+                if skill in metrics:
+                    weak_areas = metrics[skill].get('struggling_areas', [])
+        
+        # Generate lesson
+        lesson_data = generator.generate_lesson(skill, difficulty, weak_areas)
+        
+        # Save to domain data
+        domain_data = read_json_file(DOMAIN_FILE)
+        lessons = ensure_lessons(domain_data)
+        
+        skill_lessons = lessons.setdefault(skill, [])
+        lesson_id = f"{skill}_ai_lesson_{len(skill_lessons) + 1}"
+        
+        new_lesson = {
+            'id': lesson_id,
+            'title': lesson_data.get('title', f'{skill} - AI Generated'),
+            'description': lesson_data.get('description', 'AI-generated lesson'),
+            'content': lesson_data.get('content', ''),
+            'learning_objectives': lesson_data.get('learning_objectives', []),
+            'key_concepts': lesson_data.get('key_concepts', []),
+            'ai_generated': True
+        }
+        
+        skill_lessons.append(new_lesson)
+        domain_data['lessons'] = lessons
+        write_json_file(DOMAIN_FILE, domain_data)
+        
+        return jsonify({
+            "success": True,
+            "lesson": new_lesson
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/ai/generate-questions', methods=['POST'])
+def ai_generate_questions():
+    """Generate questions using AI."""
+    if not AI_ENABLED:
+        return jsonify({"error": "AI features not available. Check GEMINI_API_KEY."}), 503
+    
+    skill = request.json.get('skill')
+    difficulty = request.json.get('difficulty', 'beginner')
+    count = request.json.get('count', 5)
+    lesson_id = request.json.get('lesson_id')
+    focus_areas = request.json.get('focus_areas', [])
+    
+    if not skill:
+        return jsonify({"error": "Skill is required"}), 400
+    
+    try:
+        generator = get_generator()
+        questions = generator.generate_questions(skill, difficulty, count, lesson_id, focus_areas)
+        
+        # Add questions to domain data
+        domain_data = read_json_file(DOMAIN_FILE)
+        all_questions = domain_data.get('questions', [])
+        
+        # Get next ID
+        next_id = max([q['id'] for q in all_questions] or [0]) + 1
+        
+        # Add IDs and metadata
+        for i, q in enumerate(questions):
+            q['id'] = next_id + i
+            q['skill'] = skill
+            q['level'] = 1
+            q['ai_generated'] = True
+            if lesson_id:
+                q['lesson'] = lesson_id
+        
+        all_questions.extend(questions)
+        domain_data['questions'] = all_questions
+        write_json_file(DOMAIN_FILE, domain_data)
+        
+        return jsonify({
+            "success": True,
+            "questions": questions,
+            "count": len(questions)
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/ai/personalized-practice', methods=['POST'])
+def ai_personalized_practice():
+    """Generate personalized practice set for a student."""
+    if not AI_ENABLED:
+        return jsonify({"error": "AI features not available. Check GEMINI_API_KEY."}), 503
+    
+    student_id = request.json.get('student_id')
+    skill = request.json.get('skill')
+    count = request.json.get('count', 5)
+    
+    if not student_id or not skill:
+        return jsonify({"error": "student_id and skill are required"}), 400
+    
+    try:
+        student_data = read_json_file(STUDENT_FILE)
+        
+        if student_id not in student_data:
+            return jsonify({"error": "Student not found"}), 404
+        
+        generator = get_generator()
+        practice_data = generator.generate_personalized_practice(
+            student_data[student_id], skill, count
+        )
+        
+        # Optionally save questions to domain
+        domain_data = read_json_file(DOMAIN_FILE)
+        all_questions = domain_data.get('questions', [])
+        next_id = max([q['id'] for q in all_questions] or [0]) + 1
+        
+        generated_questions = practice_data.get('questions', [])
+        for i, q in enumerate(generated_questions):
+            q['id'] = next_id + i
+            q['skill'] = skill
+            q['level'] = 1
+            q['ai_generated'] = True
+            q['personalized'] = True
+        
+        all_questions.extend(generated_questions)
+        domain_data['questions'] = all_questions
+        write_json_file(DOMAIN_FILE, domain_data)
+        
+        return jsonify({
+            "success": True,
+            "practice": practice_data,
+            "questions_added": len(generated_questions)
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/ai/generate-hints', methods=['POST'])
+def ai_generate_hints():
+    """Generate hints for a question using AI."""
+    if not AI_ENABLED:
+        return jsonify({"error": "AI features not available. Check GEMINI_API_KEY."}), 503
+    
+    question = request.json.get('question')
+    answer = request.json.get('answer')
+    count = request.json.get('count', 3)
+    
+    if not question or not answer:
+        return jsonify({"error": "question and answer are required"}), 400
+    
+    try:
+        generator = get_generator()
+        hints = generator.generate_hints(question, answer, count)
+        
+        return jsonify({
+            "success": True,
+            "hints": hints
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     # Create data directory if it doesn't exist

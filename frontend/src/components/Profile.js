@@ -4,15 +4,17 @@ import axios from 'axios';
 
 const API_BASE = 'http://localhost:5000';
 
-const Profile = ({ onLogout, userRole }) => {
+const Profile = ({ onLogout, userRole, studentId }) => {
   const [masteryData, setMasteryData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const activeStudentId = studentId || 'student_alex';
+
   const loadProgress = async () => {
     try {
       const response = await axios.post(`${API_BASE}/api/get-progress`, {
-        student_id: 'student_alex'
+        student_id: activeStudentId
       });
       setMasteryData(response.data);
     } catch (error) {
@@ -25,7 +27,7 @@ const Profile = ({ onLogout, userRole }) => {
 
   useEffect(() => {
     loadProgress();
-  }, []);
+  }, [studentId]);
 
   if (isLoading) {
     return (

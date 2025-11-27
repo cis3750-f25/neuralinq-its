@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 
 const API_BASE = 'http://localhost:5000';
 
@@ -31,6 +32,8 @@ const Lesson = ({ onLogout, userRole, studentId, initialDiagnosticComplete, onDi
   const [diagnosticLoading, setDiagnosticLoading] = useState(false);
   const [diagnosticError, setDiagnosticError] = useState('');
   const [recommendedLessons, setRecommendedLessons] = useState([]);
+  const [lessonReadTime, setLessonReadTime] = useState(0);
+  const [lessonStartTime, setLessonStartTime] = useState(null);
 
   const activeStudentId = studentId || 'student_alex';
 
@@ -256,6 +259,8 @@ const Lesson = ({ onLogout, userRole, studentId, initialDiagnosticComplete, onDi
   const handleLessonSelect = (lesson) => {
     setSelectedLesson(lesson);
     setViewingLessonContent(true);
+    setLessonReadTime(0);
+    setLessonStartTime(Date.now());
   };
 
   const handleDiagnosticSubmit = (e) => {
@@ -311,7 +316,8 @@ const Lesson = ({ onLogout, userRole, studentId, initialDiagnosticComplete, onDi
   }, []);
 
   useEffect(() => {
-    if (selectedLesson && !viewingLessonContent) {
+    if (selectedLesson && !viewingLessonContent && !currentQuestion.id) {
+      // Only fetch question if we don't already have one
       getNextQuestion();
     }
   }, [selectedLesson, viewingLessonContent]);
@@ -478,7 +484,7 @@ const Lesson = ({ onLogout, userRole, studentId, initialDiagnosticComplete, onDi
                   <p className="lesson-description">{selectedLesson.description}</p>
                   <div className="lesson-body">
                     {selectedLesson.content ? (
-                      <p>{selectedLesson.content}</p>
+                      <ReactMarkdown>{selectedLesson.content}</ReactMarkdown>
                     ) : (
                       <p><em>No lesson content available.</em></p>
                     )}
@@ -489,8 +495,13 @@ const Lesson = ({ onLogout, userRole, studentId, initialDiagnosticComplete, onDi
                   <button
                     className="btn btn-primary btn-large"
                     onClick={() => {
+                      // Calculate time spent reading
+                      if (lessonStartTime) {
+                        const timeSpent = Math.floor((Date.now() - lessonStartTime) / 1000);
+                        setLessonReadTime(timeSpent);
+                      }
+                      // Switch to quiz mode - useEffect will handle loading question
                       setViewingLessonContent(false);
-                      getNextQuestion();
                     }}
                   >
                     Start Quiz →
